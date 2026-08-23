@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from .catalog import search_catalog
 from .ledger import RunLedger, execute_plan
 from .manifest import ExperimentManifest
 from .planner import build_plan
@@ -29,6 +30,12 @@ def _parser() -> argparse.ArgumentParser:
     history.add_argument("--ledger", default="artifacts/run-ledger.jsonl")
     history.add_argument("--limit", type=int, default=20)
 
+    catalog = subparsers.add_parser("catalog", help="Search bundled LAVIS model/project configs without importing models.")
+    catalog.add_argument("query", nargs="?", default="")
+    catalog.add_argument("--kind", choices=["all", "model", "project"], default="all")
+    catalog.add_argument("--repo-root", default=".")
+    catalog.add_argument("--limit", type=int, default=30)
+
     return parser
 
 
@@ -49,6 +56,9 @@ def main() -> None:
     elif args.command == "history":
         records = RunLedger(args.ledger).recent(args.limit)
         print(json.dumps(records, indent=2, ensure_ascii=False))
+    elif args.command == "catalog":
+        entries = search_catalog(args.query, args.kind, args.repo_root, args.limit)
+        print(json.dumps([entry.as_dict() for entry in entries], indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":

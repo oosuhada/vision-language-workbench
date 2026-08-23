@@ -53,6 +53,16 @@ vl-workbench history --limit 10
 The ledger stores only compact run metadata under `artifacts/` and is ignored by
 Git, so model outputs and large generated files do not pollute repository history.
 
+Search bundled LAVIS configs without importing any heavyweight model package:
+
+```bash
+vl-workbench catalog blip2 --kind model
+vl-workbench catalog retrieval --kind project
+```
+
+This catalog is filesystem-based, so it stays fast and does not trigger checkpoint
+downloads or GPU initialization.
+
 The underlying execution still goes through the original LAVIS entrypoints:
 `train.py` and `evaluate.py`.
 
