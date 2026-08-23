@@ -44,6 +44,15 @@ Execute the same plan and record it:
 vl-workbench run experiments/clip-coco.yaml
 ```
 
+Review recent execution provenance without opening model logs:
+
+```bash
+vl-workbench history --limit 10
+```
+
+The ledger stores only compact run metadata under `artifacts/` and is ignored by
+Git, so model outputs and large generated files do not pollute repository history.
+
 The underlying execution still goes through the original LAVIS entrypoints:
 `train.py` and `evaluate.py`.
 
