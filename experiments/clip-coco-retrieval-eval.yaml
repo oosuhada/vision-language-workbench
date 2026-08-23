@@ -1,0 +1,10 @@
+name: clip-coco-retrieval-eval
+mode: evaluate
+cfg_path: lavis/projects/clip/exp_coco_ret_eval.yaml
+options:
+  run.num_workers: 4
+tags:
+  - clip
+  - retrieval
+  - coco
+notes: Reusable baseline manifest for the bundled LAVIS CLIP retrieval project.
