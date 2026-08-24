@@ -10,6 +10,7 @@ from .catalog import search_catalog
 from .ledger import RunLedger, execute_plan
 from .manifest import ExperimentManifest
 from .planner import build_plan
+from .sweep import SweepSpec, build_sweep_plans, materialize_sweep
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -36,6 +37,14 @@ def _parser() -> argparse.ArgumentParser:
     catalog.add_argument("--repo-root", default=".")
     catalog.add_argument("--limit", type=int, default=30)
 
+    sweep = subparsers.add_parser("sweep-plan", help="Expand a matrix sweep into concrete LAVIS commands.")
+    sweep.add_argument("spec")
+    sweep.add_argument("--repo-root", default=".")
+
+    materialize = subparsers.add_parser("sweep-materialize", help="Write matrix sweep variants as normal experiment manifests.")
+    materialize.add_argument("spec")
+    materialize.add_argument("--output-dir", default="artifacts/generated-experiments")
+
     return parser
 
 
@@ -59,6 +68,14 @@ def main() -> None:
     elif args.command == "catalog":
         entries = search_catalog(args.query, args.kind, args.repo_root, args.limit)
         print(json.dumps([entry.as_dict() for entry in entries], indent=2, ensure_ascii=False))
+    elif args.command == "sweep-plan":
+        spec = SweepSpec.load(args.spec)
+        plans = build_sweep_plans(spec, args.repo_root)
+        print(json.dumps([plan.as_dict() for plan in plans], indent=2, ensure_ascii=False))
+    elif args.command == "sweep-materialize":
+        spec = SweepSpec.load(args.spec)
+        paths = materialize_sweep(spec, args.output_dir)
+        print(json.dumps([str(path) for path in paths], indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":

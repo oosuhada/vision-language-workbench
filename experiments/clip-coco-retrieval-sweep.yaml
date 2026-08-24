@@ -1,0 +1,13 @@
+name: clip-coco-retrieval-sweep
+mode: evaluate
+cfg_path: lavis/projects/clip/exp_coco_ret_eval.yaml
+options:
+  run.num_workers: 4
+matrix:
+  run.batch_size_eval: [8, 16]
+  run.seed: [42, 1337]
+tags:
+  - clip
+  - retrieval
+  - coco
+notes: Small deterministic matrix example; execution still uses the original LAVIS evaluator.

@@ -48,6 +48,12 @@ Review recent execution provenance without opening model logs:
 
 ```bash
 vl-workbench history --limit 10
+
+# expand 4 concrete LAVIS runs without writing duplicate scripts
+vl-workbench sweep-plan experiments/clip-coco-retrieval-sweep.yaml
+
+# optionally materialize the variants as ordinary manifests
+vl-workbench sweep-materialize experiments/clip-coco-retrieval-sweep.yaml
 ```
 
 The ledger stores only compact run metadata under `artifacts/` and is ignored by
