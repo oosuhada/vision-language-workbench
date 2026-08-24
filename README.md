@@ -15,6 +15,7 @@ reviewed, executed, and traced without editing shell scripts for every run.
 - Deterministic command planning for `train.py` and `evaluate.py`.
 - Config and manifest fingerprints for reproducibility.
 - A run ledger that records the exact plan and exit status.
+- Frozen representation snapshots and linear/geometry probes.
 - A compact CLI: `vl-workbench`.
 
 ## Quick start
@@ -77,6 +78,36 @@ downloads or GPU initialization.
 
 The underlying execution still goes through the original LAVIS entrypoints:
 `train.py` and `evaluate.py`.
+
+## Representation research
+
+Intermediate LAVIS representations can be captured as reusable NumPy snapshots
+and analyzed without repeatedly loading model weights. The extractor calls the
+bundled model's existing `extract_features()` implementation rather than
+recreating an encoder.
+
+Probe data is JSONL with stable ids and optional labels:
+
+```json
+{"id":"dog-001","image":"images/dog.jpg","text":"a black dog running","label":"dog"}
+{"id":"cat-001","image":"images/cat.jpg","text":"a tabby cat sitting","label":"cat"}
+```
+
+```bash
+vl-workbench extract-features probes.jsonl \
+  --model-name blip_feature_extractor \
+  --model-type base \
+  --mode image \
+  --pooling cls \
+  --output artifacts/blip-base-image.npz
+
+vl-workbench probe artifacts/blip-base-image.npz
+```
+
+`extract-features` also accepts `--checkpoint`, allowing the identical probe
+set to be captured before and after fine-tuning. `probe` reports frozen ridge
+linear-probe accuracy, within-class cosine cohesion, between-class centroid
+similarity, separation margin, and embedding anisotropy.
 
 ## Repository shape
 

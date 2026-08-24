@@ -9,8 +9,10 @@ from pathlib import Path
 from .catalog import search_catalog
 from .artifacts import build_resume_plan, discover_artifacts, resolve_output_dir
 from .ledger import RunLedger, execute_plan
+from .lavis_features import extract_lavis_snapshot
 from .manifest import ExperimentManifest
 from .planner import build_plan
+from .representations import load_snapshot, probe_snapshot
 from .sweep import SweepSpec, build_sweep_plans, materialize_sweep
 
 
@@ -55,6 +57,24 @@ def _parser() -> argparse.ArgumentParser:
     resume.add_argument("--repo-root", default=".")
     resume.add_argument("--checkpoint")
 
+    extract = subparsers.add_parser("extract-features", help="Save frozen LAVIS representations from a JSONL probe dataset.")
+    extract.add_argument("dataset_jsonl")
+    extract.add_argument("--output", required=True)
+    extract.add_argument("--model-name", required=True)
+    extract.add_argument("--model-type", required=True)
+    extract.add_argument("--mode", choices=["image", "text", "multimodal"], required=True)
+    extract.add_argument("--pooling", choices=["cls", "mean"], default="cls")
+    extract.add_argument("--feature-field")
+    extract.add_argument("--checkpoint")
+    extract.add_argument("--device", default="auto")
+    extract.add_argument("--batch-size", type=int, default=8)
+
+    probe = subparsers.add_parser("probe", help="Measure linear separability and geometry of a representation snapshot.")
+    probe.add_argument("snapshot")
+    probe.add_argument("--test-fraction", type=float, default=0.2)
+    probe.add_argument("--ridge", type=float, default=1.0)
+    probe.add_argument("--seed", type=int, default=42)
+
     return parser
 
 
@@ -98,6 +118,28 @@ def main() -> None:
         manifest = ExperimentManifest.load(args.manifest)
         plan = build_resume_plan(manifest, args.repo_root, args.checkpoint)
         print(json.dumps(plan.as_dict(), indent=2, ensure_ascii=False))
+    elif args.command == "extract-features":
+        result = extract_lavis_snapshot(
+            args.dataset_jsonl,
+            args.output,
+            model_name=args.model_name,
+            model_type=args.model_type,
+            mode=args.mode,
+            pooling=args.pooling,
+            feature_field=args.feature_field,
+            checkpoint=args.checkpoint,
+            device=args.device,
+            batch_size=args.batch_size,
+        )
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+    elif args.command == "probe":
+        result = probe_snapshot(
+            load_snapshot(args.snapshot),
+            test_fraction=args.test_fraction,
+            ridge=args.ridge,
+            seed=args.seed,
+        )
+        print(json.dumps(result, indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":
