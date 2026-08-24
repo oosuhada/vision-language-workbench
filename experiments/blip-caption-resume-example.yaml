@@ -1,0 +1,10 @@
+name: blip-caption-coco
+mode: train
+cfg_path: lavis/projects/blip/train/caption_coco_ft.yaml
+options:
+  run.num_workers: 4
+tags:
+  - blip
+  - captioning
+  - coco
+notes: Use resume-plan after a checkpoint appears in the configured LAVIS output directory.

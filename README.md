@@ -54,6 +54,12 @@ vl-workbench sweep-plan experiments/clip-coco-retrieval-sweep.yaml
 
 # optionally materialize the variants as ordinary manifests
 vl-workbench sweep-materialize experiments/clip-coco-retrieval-sweep.yaml
+
+# inspect the output directory declared by the underlying LAVIS config
+vl-workbench artifacts experiments/blip-caption-resume-example.yaml
+
+# continue training from the newest checkpoint without hand-editing LAVIS YAML
+vl-workbench resume-plan experiments/blip-caption-resume-example.yaml
 ```
 
 The ledger stores only compact run metadata under `artifacts/` and is ignored by

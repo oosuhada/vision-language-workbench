@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 from .catalog import search_catalog
+from .artifacts import build_resume_plan, discover_artifacts, resolve_output_dir
 from .ledger import RunLedger, execute_plan
 from .manifest import ExperimentManifest
 from .planner import build_plan
@@ -45,6 +46,15 @@ def _parser() -> argparse.ArgumentParser:
     materialize.add_argument("spec")
     materialize.add_argument("--output-dir", default="artifacts/generated-experiments")
 
+    artifacts = subparsers.add_parser("artifacts", help="Discover files produced in a LAVIS experiment output directory.")
+    artifacts.add_argument("manifest")
+    artifacts.add_argument("--repo-root", default=".")
+
+    resume = subparsers.add_parser("resume-plan", help="Build a train command using the latest or an explicit LAVIS checkpoint.")
+    resume.add_argument("manifest")
+    resume.add_argument("--repo-root", default=".")
+    resume.add_argument("--checkpoint")
+
     return parser
 
 
@@ -76,6 +86,18 @@ def main() -> None:
         spec = SweepSpec.load(args.spec)
         paths = materialize_sweep(spec, args.output_dir)
         print(json.dumps([str(path) for path in paths], indent=2, ensure_ascii=False))
+    elif args.command == "artifacts":
+        manifest = ExperimentManifest.load(args.manifest)
+        output_dir = resolve_output_dir(manifest, args.repo_root)
+        payload = {
+            "output_dir": str(output_dir) if output_dir else None,
+            "artifacts": [artifact.as_dict() for artifact in discover_artifacts(manifest, args.repo_root)],
+        }
+        print(json.dumps(payload, indent=2, ensure_ascii=False))
+    elif args.command == "resume-plan":
+        manifest = ExperimentManifest.load(args.manifest)
+        plan = build_resume_plan(manifest, args.repo_root, args.checkpoint)
+        print(json.dumps(plan.as_dict(), indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":
