@@ -29,6 +29,7 @@ from lavis.models.blip_models.blip_image_text_matching import BlipITM
 from lavis.models.blip_models.blip_nlvr import BlipNLVR
 from lavis.models.blip_models.blip_pretrain import BlipPretrain
 from lavis.models.blip_models.blip_retrieval import BlipRetrieval
+from lavis.models.blip_models.blip_retrieval_hard_negative import BlipRetrievalHardNegative
 from lavis.models.blip_models.blip_vqa import BlipVQA
 
 from lavis.models.blip2_models.blip2 import Blip2Base

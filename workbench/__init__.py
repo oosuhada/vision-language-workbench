@@ -9,6 +9,7 @@ from .representations import RepresentationSnapshot, load_snapshot, probe_snapsh
 from .drift import compare_snapshots, linear_cka
 from .hard_negatives import mine_hard_negatives
 from .lora_research import LoRALinear, LoRAPolicy, compare_lora_policies, discover_lora_targets, inject_lora
+from .hard_negative_training import hard_negative_margin_loss, materialize_hard_negative_annotations
 
 __all__ = [
     "CatalogEntry",
@@ -31,5 +32,7 @@ __all__ = [
     "compare_lora_policies",
     "discover_lora_targets",
     "inject_lora",
+    "hard_negative_margin_loss",
+    "materialize_hard_negative_annotations",
     "search_catalog",
 ]

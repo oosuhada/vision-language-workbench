@@ -89,6 +89,7 @@ from lavis.datasets.builders.retrieval_builder import (
     COCORetrievalBuilder,
     Flickr30kBuilder,
 )
+from lavis.datasets.builders.hard_negative_retrieval_builder import HardNegativeRetrievalBuilder
 
 from lavis.datasets.builders.audio_caption_builder import (
     AudioSetBuilder,
@@ -128,6 +129,7 @@ __all__ = [
     "BlipDiffusionFinetuneBuilder",
     "COCOCapBuilder",
     "COCORetrievalBuilder",
+    "HardNegativeRetrievalBuilder",
     "COCOVQABuilder",
     "ConceptualCaption12MBuilder",
     "ConceptualCaption3MBuilder",

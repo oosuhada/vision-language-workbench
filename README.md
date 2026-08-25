@@ -164,6 +164,25 @@ low-rank residuals while preserving the underlying LAVIS architecture.
 This supports controlled studies such as Q/V rank 8 vs 16, projection-only
 LoRA, or vision/Q-Former/LLM placement at a known trainable-parameter budget.
 
+## Hard negatives in the training loop
+
+Mined neighbors can now be joined back to the original probe JSONL as concrete
+LAVIS retrieval annotations with `materialize_hard_negative_annotations()`.
+The registered `hard_negative_retrieval` dataset returns the normal positive
+caption plus a mined `hard_negative_text` and its cosine hardness score.
+
+`hard_negative_margin_loss()` then adds an explicit cosine ranking objective on
+top of features produced by the existing LAVIS encoders. It supports one or
+multiple negatives per image and optional hardness weighting, allowing studies
+of random vs mined negatives without rewriting BLIP/ALBEF encoders.
+
+For end-to-end training, `blip_retrieval_hard_negative` subclasses the original
+`BlipRetrieval`: the full upstream ITC/ITM forward pass is reused, then the
+already-computed positive image/text embeddings are paired with the mined
+negative caption and an extra weighted margin term is added to the loss. The
+model config exposes `hard_negative_margin` and `hard_negative_weight` as normal
+experiment variables.
+
 ## Repository shape
 
 ```text
