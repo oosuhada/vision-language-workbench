@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 from .catalog import search_catalog
+from .drift import compare_snapshots
 from .artifacts import build_resume_plan, discover_artifacts, resolve_output_dir
 from .ledger import RunLedger, execute_plan
 from .lavis_features import extract_lavis_snapshot
@@ -75,6 +76,11 @@ def _parser() -> argparse.ArgumentParser:
     probe.add_argument("--ridge", type=float, default=1.0)
     probe.add_argument("--seed", type=int, default=42)
 
+    drift = subparsers.add_parser("drift", help="Compare representation geometry between two checkpoints/snapshots.")
+    drift.add_argument("baseline")
+    drift.add_argument("current")
+    drift.add_argument("--top-k", type=int, default=10)
+
     return parser
 
 
@@ -139,6 +145,9 @@ def main() -> None:
             ridge=args.ridge,
             seed=args.seed,
         )
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+    elif args.command == "drift":
+        result = compare_snapshots(load_snapshot(args.baseline), load_snapshot(args.current), top_k=args.top_k)
         print(json.dumps(result, indent=2, ensure_ascii=False))
 
 

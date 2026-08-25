@@ -109,6 +109,21 @@ set to be captured before and after fine-tuning. `probe` reports frozen ridge
 linear-probe accuracy, within-class cosine cohesion, between-class centroid
 similarity, separation margin, and embedding anisotropy.
 
+Compare a base snapshot against a fine-tuned checkpoint snapshot:
+
+```bash
+vl-workbench drift \
+  artifacts/blip-base-image.npz \
+  artifacts/blip-finetuned-image.npz \
+  --top-k 20
+```
+
+Drift analysis aligns samples by stable ids and reports linear CKA, per-sample
+cosine drift, anisotropy change, class-separation change, class-centroid drift,
+and the samples whose representations moved the most. CKA remains valid even
+when the compared feature dimensions differ; direct cosine metrics are emitted
+when dimensions match.
+
 ## Repository shape
 
 ```text
