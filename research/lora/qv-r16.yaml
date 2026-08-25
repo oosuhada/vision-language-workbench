@@ -1,0 +1,8 @@
+name: qv-r16
+rank: 16
+alpha: 32
+dropout: 0.1
+target_suffixes:
+  - q_proj
+  - v_proj
+freeze_base: true

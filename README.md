@@ -150,6 +150,20 @@ Mining is cosine-nearest-neighbor based and chunked to avoid allocating the
 entire similarity matrix. The resulting JSONL can be consumed by later
 fine-tuning data builders without changing the bundled LAVIS encoders.
 
+## LoRA placement research
+
+The bundled xInstructBLIP code already uses PEFT LoRA for its LLM path. The
+workbench adds a generic research policy for any LAVIS `nn.Linear` tree so LoRA
+rank and placement are explicit experiment variables instead of fixed choices.
+
+Policies under `research/lora/` can target module suffixes or regular
+expressions. `compare_lora_policies()` reports matched layers and exact adapter
+parameter cost before training. `inject_lora()` installs zero-initialized
+low-rank residuals while preserving the underlying LAVIS architecture.
+
+This supports controlled studies such as Q/V rank 8 vs 16, projection-only
+LoRA, or vision/Q-Former/LLM placement at a known trainable-parameter budget.
+
 ## Repository shape
 
 ```text
