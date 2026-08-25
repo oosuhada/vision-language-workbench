@@ -124,6 +124,32 @@ and the samples whose representations moved the most. CKA remains valid even
 when the compared feature dimensions differ; direct cosine metrics are emitted
 when dimensions match.
 
+## Hard-negative mining
+
+Use the same saved representation space to find examples the current model is
+most likely to confuse:
+
+```bash
+vl-workbench hard-negatives artifacts/blip-base-image.npz \
+  --policy different-label \
+  --top-k 5 \
+  --output artifacts/hard-negatives.jsonl
+```
+
+For cross-modal contrastive mining, pass a second snapshot (for example image
+anchors against text candidates) and use stable ids to exclude the true pair:
+
+```bash
+vl-workbench hard-negatives artifacts/images.npz \
+  --candidates artifacts/text.npz \
+  --policy different-id \
+  --top-k 10
+```
+
+Mining is cosine-nearest-neighbor based and chunked to avoid allocating the
+entire similarity matrix. The resulting JSONL can be consumed by later
+fine-tuning data builders without changing the bundled LAVIS encoders.
+
 ## Repository shape
 
 ```text

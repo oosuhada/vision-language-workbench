@@ -7,6 +7,7 @@ from .sweep import SweepSpec, build_sweep_plans
 from .artifacts import Artifact, build_resume_plan, discover_artifacts
 from .representations import RepresentationSnapshot, load_snapshot, probe_snapshot
 from .drift import compare_snapshots, linear_cka
+from .hard_negatives import mine_hard_negatives
 
 __all__ = [
     "CatalogEntry",
@@ -22,6 +23,7 @@ __all__ = [
     "discover_artifacts",
     "load_snapshot",
     "linear_cka",
+    "mine_hard_negatives",
     "probe_snapshot",
     "search_catalog",
 ]

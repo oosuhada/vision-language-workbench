@@ -8,6 +8,7 @@ from pathlib import Path
 
 from .catalog import search_catalog
 from .drift import compare_snapshots
+from .hard_negatives import mine_hard_negatives, write_hard_negative_jsonl
 from .artifacts import build_resume_plan, discover_artifacts, resolve_output_dir
 from .ledger import RunLedger, execute_plan
 from .lavis_features import extract_lavis_snapshot
@@ -81,6 +82,14 @@ def _parser() -> argparse.ArgumentParser:
     drift.add_argument("current")
     drift.add_argument("--top-k", type=int, default=10)
 
+    negatives = subparsers.add_parser("hard-negatives", help="Mine nearest incorrect samples from saved embedding spaces.")
+    negatives.add_argument("anchor")
+    negatives.add_argument("--candidates")
+    negatives.add_argument("--policy", choices=["different-id", "different-label", "same-label"], default="different-label")
+    negatives.add_argument("--top-k", type=int, default=5)
+    negatives.add_argument("--chunk-size", type=int, default=512)
+    negatives.add_argument("--output")
+
     return parser
 
 
@@ -148,6 +157,13 @@ def main() -> None:
         print(json.dumps(result, indent=2, ensure_ascii=False))
     elif args.command == "drift":
         result = compare_snapshots(load_snapshot(args.baseline), load_snapshot(args.current), top_k=args.top_k)
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+    elif args.command == "hard-negatives":
+        anchor = load_snapshot(args.anchor)
+        candidates = load_snapshot(args.candidates) if args.candidates else None
+        result = mine_hard_negatives(anchor, candidates, top_k=args.top_k, policy=args.policy, chunk_size=args.chunk_size)
+        if args.output:
+            result["written_to"] = str(write_hard_negative_jsonl(result, args.output))
         print(json.dumps(result, indent=2, ensure_ascii=False))
 
 
