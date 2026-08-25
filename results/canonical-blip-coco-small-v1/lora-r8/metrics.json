@@ -1,0 +1,352 @@
+{
+  "drift_vs_base": {
+    "anisotropy": {
+      "baseline": 0.41490617283588915,
+      "current": 0.39830288723689655,
+      "delta": -0.0166032855989926
+    },
+    "baseline_dimensions": 256,
+    "baseline_metadata": {
+      "modality": "fused",
+      "model": "Salesforce/blip-itm-base-coco",
+      "revision": "98cf803d8586e8e8b3ec527885ac50c422d514ae",
+      "split": "probe",
+      "variant": "base"
+    },
+    "class_centroid_drift": {
+      "mean_cosine_drift": 0.0003344775361029395,
+      "per_class": {
+        "car": 0.00024953404520677847,
+        "cat": 0.00039942552204308424,
+        "dog": 0.0004393965364527519,
+        "person": 0.00024955404070914344
+      }
+    },
+    "class_geometry": {
+      "baseline": {
+        "between_class_centroid_cosine": 0.7330945571931692,
+        "separation_margin": -0.22853610018952164,
+        "within_class_cosine": 0.5045584570036475
+      },
+      "current": {
+        "between_class_centroid_cosine": 0.7173290703149577,
+        "separation_margin": -0.22622610283121541,
+        "within_class_cosine": 0.4911029674837423
+      },
+      "separation_margin_delta": 0.002309997358306226
+    },
+    "current_dimensions": 256,
+    "current_metadata": {
+      "modality": "fused",
+      "model": "Salesforce/blip-itm-base-coco",
+      "revision": "98cf803d8586e8e8b3ec527885ac50c422d514ae",
+      "split": "probe",
+      "variant": "lora-r8"
+    },
+    "linear_cka": 0.9999529021084524,
+    "matched_samples": 80,
+    "most_drifted_samples": [
+      {
+        "cosine_drift": 0.0006210631564822489,
+        "cosine_similarity": 0.9993789368435178,
+        "id": "coco-val2017-000000095862"
+      },
+      {
+        "cosine_drift": 0.0005206185043296063,
+        "cosine_similarity": 0.9994793814956704,
+        "id": "coco-val2017-000000419379"
+      },
+      {
+        "cosine_drift": 0.0004886186339944087,
+        "cosine_similarity": 0.9995113813660056,
+        "id": "coco-val2017-000000082807"
+      },
+      {
+        "cosine_drift": 0.00045907953768464793,
+        "cosine_similarity": 0.9995409204623154,
+        "id": "coco-val2017-000000267300"
+      },
+      {
+        "cosine_drift": 0.00045720232304402586,
+        "cosine_similarity": 0.999542797676956,
+        "id": "coco-val2017-000000366141"
+      },
+      {
+        "cosine_drift": 0.0004263031777441695,
+        "cosine_similarity": 0.9995736968222558,
+        "id": "coco-val2017-000000014831"
+      },
+      {
+        "cosine_drift": 0.00041764378615050113,
+        "cosine_similarity": 0.9995823562138495,
+        "id": "coco-val2017-000000316015"
+      },
+      {
+        "cosine_drift": 0.00040536180528616406,
+        "cosine_similarity": 0.9995946381947138,
+        "id": "coco-val2017-000000106389"
+      },
+      {
+        "cosine_drift": 0.0004033945733208366,
+        "cosine_similarity": 0.9995966054266792,
+        "id": "coco-val2017-000000109055"
+      },
+      {
+        "cosine_drift": 0.0004030520992331921,
+        "cosine_similarity": 0.9995969479007668,
+        "id": "coco-val2017-000000078420"
+      }
+    ],
+    "sample_cosine": {
+      "mean_drift": 0.00030036289881503334,
+      "mean_similarity": 0.999699637101185,
+      "median_drift": 0.00029618210287268854,
+      "p95_drift": 0.000457296183776057
+    }
+  },
+  "evaluation_seconds": 1.3609512219999829,
+  "probe_samples": 80,
+  "representation": {
+    "anisotropy": 0.39830288723689655,
+    "class_count": 4,
+    "class_separation": {
+      "between_class_centroid_cosine": 0.7173290703149577,
+      "separation_margin": -0.22622610283121541,
+      "within_class_cosine": 0.4911029674837423
+    },
+    "dimensions": 256,
+    "linear_probe": {
+      "classes": [
+        "car",
+        "cat",
+        "dog",
+        "person"
+      ],
+      "ridge": 1.0,
+      "test_accuracy": 1.0,
+      "test_samples": 20,
+      "train_accuracy": 1.0,
+      "train_samples": 60
+    },
+    "metadata": {
+      "modality": "fused",
+      "model": "Salesforce/blip-itm-base-coco",
+      "revision": "98cf803d8586e8e8b3ec527885ac50c422d514ae",
+      "split": "probe",
+      "variant": "lora-r8"
+    },
+    "samples": 80
+  },
+  "retrieval": {
+    "image_to_text_median_rank": 1.0,
+    "image_to_text_nll": 1.108654472231865,
+    "image_to_text_r_at_1": 0.9625,
+    "image_to_text_r_at_10": 1.0,
+    "image_to_text_r_at_5": 1.0,
+    "mean_r_at_1": 0.9375,
+    "mean_r_at_10": 1.0,
+    "mean_r_at_5": 1.0,
+    "samples": 80,
+    "text_to_image_median_rank": 1.0,
+    "text_to_image_r_at_1": 0.9125,
+    "text_to_image_r_at_10": 1.0,
+    "text_to_image_r_at_5": 1.0
+  },
+  "training": {
+    "adapter_fraction_of_base": 0.001318076283325224,
+    "adapter_parameters": 294912,
+    "base_parameters": 223744258,
+    "epochs": 2,
+    "final_loss": 0.3051605224609375,
+    "initial_loss": 0.177215576171875,
+    "learning_rate": 0.0001,
+    "matched_modules": 24,
+    "mean_loss": 0.20947718620300293,
+    "policy": {
+      "alpha": 16.0,
+      "dropout": 0.05,
+      "freeze_base": true,
+      "name": "lora-r8",
+      "rank": 8,
+      "target_regex": [
+        "^text_encoder\\.encoder\\.layer\\.\\d+\\.attention\\.self\\.(query|value)$"
+      ],
+      "target_suffixes": []
+    },
+    "samples": 64,
+    "steps": 16,
+    "targets": [
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.0.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.0.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.1.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.1.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.2.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.2.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.3.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.3.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.4.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.4.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.5.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.5.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.6.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.6.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.7.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.7.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.8.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.8.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.9.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.9.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.10.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.10.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.11.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.11.attention.self.value",
+        "out_features": 768
+      }
+    ],
+    "trainable_parameters_after_injection": 294912,
+    "training_seconds": 2.8253203040000017
+  },
+  "variant": "lora-r8"
+}

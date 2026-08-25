@@ -1,0 +1,44 @@
+[
+  {
+    "anisotropy": 0.41490617283588915,
+    "cka_vs_base": 1.0,
+    "class_separation": -0.22853610018952164,
+    "evaluation_seconds": 2.559433083999977,
+    "linear_probe_accuracy": 1.0,
+    "mean_cosine_drift": 0.0,
+    "retrieval_mean_r_at_1": 0.95625,
+    "retrieval_mean_r_at_10": 1.0,
+    "retrieval_mean_r_at_5": 1.0,
+    "trainable_parameter_pct": 0.0,
+    "trainable_parameters": 0,
+    "variant": "base"
+  },
+  {
+    "anisotropy": 0.39830288723689655,
+    "cka_vs_base": 0.9999529021084524,
+    "class_separation": -0.22622610283121541,
+    "evaluation_seconds": 1.3609512219999829,
+    "linear_probe_accuracy": 1.0,
+    "mean_cosine_drift": 0.00030036289881503334,
+    "retrieval_mean_r_at_1": 0.9375,
+    "retrieval_mean_r_at_10": 1.0,
+    "retrieval_mean_r_at_5": 1.0,
+    "trainable_parameter_pct": 0.1318076283325224,
+    "trainable_parameters": 294912,
+    "variant": "lora-r8"
+  },
+  {
+    "anisotropy": 0.38665807789319023,
+    "cka_vs_base": 0.9998495727563471,
+    "class_separation": -0.2236897329270488,
+    "evaluation_seconds": 1.3549494199999685,
+    "linear_probe_accuracy": 1.0,
+    "mean_cosine_drift": 0.00086188160328943,
+    "retrieval_mean_r_at_1": 0.9437500000000001,
+    "retrieval_mean_r_at_10": 1.0,
+    "retrieval_mean_r_at_5": 1.0,
+    "trainable_parameter_pct": 0.2636152566650448,
+    "trainable_parameters": 589824,
+    "variant": "lora-r16"
+  }
+]

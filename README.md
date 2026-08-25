@@ -79,6 +79,17 @@ retrieval recall is the average of image-to-text and text-to-image recall.
 | Variant | Trainable parameters | Trainable % | Mean R@1 | Mean R@5 | Mean R@10 | Linear probe | Class separation | Anisotropy |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
 | Pretrained Base | 0 | 0.0000% | 0.95625 | 1.00000 | 1.00000 | 1.00000 | -0.22854 | 0.41491 |
+| LoRA Q/V r=8 | 294,912 | 0.1318% | 0.93750 | 1.00000 | 1.00000 | 1.00000 | -0.22623 | 0.39830 |
+| LoRA Q/V r=16 | 589,824 | 0.2636% | 0.94375 | 1.00000 | 1.00000 | 1.00000 | -0.22369 | 0.38666 |
+
+LoRA used identical data and budget for both ranks: 2 epochs, 16 optimizer
+steps, batch size 8, learning rate `1e-4`, and a symmetric contrastive loss.
+R@1 decreased by 0.01875 for r=8 and 0.01250 for r=16 versus Base; these are
+the canonical outcomes and were not retuned. Fused-space CKA versus Base was
+0.999953 (r=8) and 0.999850 (r=16), with mean cosine drift 0.000300 and
+0.000862 respectively. The result indicates that this tiny Q/V-only update
+slightly reduces retrieval R@1 while barely moving the held-out representation
+space, although its image-to-text NLL improves from 1.16840 to 1.10865/1.06734.
 
 This is an actual A100/bfloat16 run, not a synthetic smoke test. Its pinned
 environment, sample IDs, confidence records, and representation NPZ files are
