@@ -66,6 +66,24 @@ vl-workbench resume-plan experiments/blip-caption-resume-example.yaml
 The ledger stores only compact run metadata under `artifacts/` and is ignored by
 Git, so model outputs and large generated files do not pollute repository history.
 
+## Measured results
+
+The first canonical study uses the real
+[COCO 2017](https://cocodataset.org/#download) validation images and human
+captions with the pretrained
+[`Salesforce/blip-itm-base-coco`](https://huggingface.co/Salesforce/blip-itm-base-coco)
+checkpoint. A deterministic, leakage-free subset contains 64 training pairs
+and 80 held-out probe pairs across `person`, `car`, `dog`, and `cat`. Mean
+retrieval recall is the average of image-to-text and text-to-image recall.
+
+| Variant | Trainable parameters | Trainable % | Mean R@1 | Mean R@5 | Mean R@10 | Linear probe | Class separation | Anisotropy |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Pretrained Base | 0 | 0.0000% | 0.95625 | 1.00000 | 1.00000 | 1.00000 | -0.22854 | 0.41491 |
+
+This is an actual A100/bfloat16 run, not a synthetic smoke test. Its pinned
+environment, sample IDs, confidence records, and representation NPZ files are
+stored under [`results/canonical-blip-coco-small-v1`](results/canonical-blip-coco-small-v1).
+
 Search bundled LAVIS configs without importing any heavyweight model package:
 
 ```bash

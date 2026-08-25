@@ -1,0 +1,52 @@
+{
+  "evaluation_seconds": 2.559433083999977,
+  "probe_samples": 80,
+  "representation": {
+    "anisotropy": 0.41490617283588915,
+    "class_count": 4,
+    "class_separation": {
+      "between_class_centroid_cosine": 0.7330945571931692,
+      "separation_margin": -0.22853610018952164,
+      "within_class_cosine": 0.5045584570036475
+    },
+    "dimensions": 256,
+    "linear_probe": {
+      "classes": [
+        "car",
+        "cat",
+        "dog",
+        "person"
+      ],
+      "ridge": 1.0,
+      "test_accuracy": 1.0,
+      "test_samples": 20,
+      "train_accuracy": 1.0,
+      "train_samples": 60
+    },
+    "metadata": {
+      "modality": "fused",
+      "model": "Salesforce/blip-itm-base-coco",
+      "revision": "98cf803d8586e8e8b3ec527885ac50c422d514ae",
+      "split": "probe",
+      "variant": "base"
+    },
+    "samples": 80
+  },
+  "retrieval": {
+    "image_to_text_median_rank": 1.0,
+    "image_to_text_nll": 1.1683986857533455,
+    "image_to_text_r_at_1": 0.975,
+    "image_to_text_r_at_10": 1.0,
+    "image_to_text_r_at_5": 1.0,
+    "mean_r_at_1": 0.95625,
+    "mean_r_at_10": 1.0,
+    "mean_r_at_5": 1.0,
+    "samples": 80,
+    "text_to_image_median_rank": 1.0,
+    "text_to_image_r_at_1": 0.9375,
+    "text_to_image_r_at_10": 1.0,
+    "text_to_image_r_at_5": 1.0
+  },
+  "training": null,
+  "variant": "base"
+}

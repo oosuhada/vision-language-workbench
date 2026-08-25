@@ -1,0 +1,67 @@
+{
+  "categories": [
+    "person",
+    "car",
+    "dog",
+    "cat"
+  ],
+  "config": {
+    "batch_size": 8,
+    "categories": [
+      "person",
+      "car",
+      "dog",
+      "cat"
+    ],
+    "contrastive_temperature": 0.07,
+    "epochs": 2,
+    "learning_rate": 0.0001,
+    "lora_dropout": 0.05,
+    "model_id": "Salesforce/blip-itm-base-coco",
+    "model_revision": "98cf803d8586e8e8b3ec527885ac50c422d514ae",
+    "probe_per_class": 20,
+    "seed": 42,
+    "study": "canonical-blip-coco-small-v1",
+    "train_per_class": 16,
+    "variants": [
+      {
+        "alpha": 16.0,
+        "name": "lora-r8",
+        "rank": 8
+      },
+      {
+        "alpha": 32.0,
+        "name": "lora-r16",
+        "rank": 16
+      }
+    ],
+    "weight_decay": 0.0
+  },
+  "cuda": "12.8",
+  "dataset": "COCO 2017 validation subset",
+  "dtype": "torch.bfloat16",
+  "git_commit": "66dd6ee12b2e80ddd11ae5b5cd16b53c3b08efa1",
+  "gpu": "NVIDIA A100-SXM4-40GB",
+  "gpu_capability": [
+    8,
+    0
+  ],
+  "model_id": "Salesforce/blip-itm-base-coco",
+  "model_revision": "98cf803d8586e8e8b3ec527885ac50c422d514ae",
+  "numpy": "2.1.3",
+  "pillow": "11.3.0",
+  "platform": "Linux-6.6.122+-x86_64-with-glibc2.35",
+  "probe_samples": 80,
+  "python": "3.13.15 (main, Aug  6 2026, 11:06:23) [GCC 11.4.0]",
+  "requested_variants": [
+    "base",
+    "lora-r8",
+    "lora-r16"
+  ],
+  "study": "canonical-blip-coco-small-v1",
+  "torch": "2.11.0+cu128",
+  "train_probe_overlap": 0,
+  "train_samples": 64,
+  "transformers": "4.57.6",
+  "utc_timestamp": "2026-08-25T23:44:17.828618+00:00"
+}
