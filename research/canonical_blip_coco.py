@@ -33,6 +33,12 @@ import torch
 import torch.nn.functional as F
 from transformers import BlipForImageTextRetrieval, BlipProcessor
 
+# Direct ``python research/...py`` execution otherwise exposes only the
+# research directory on sys.path, not the repository package root.
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
 from workbench.drift import compare_snapshots
 from workbench.lora_research import LoRAPolicy, inject_lora
 from workbench.representations import load_snapshot, probe_snapshot, save_snapshot
