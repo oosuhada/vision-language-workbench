@@ -46,7 +46,10 @@ from workbench.representations import load_snapshot, probe_snapshot, save_snapsh
 
 CAPTIONS_URL = "https://huggingface.co/datasets/merve/coco/resolve/main/annotations/captions_val2017.json"
 INSTANCES_URL = "https://huggingface.co/datasets/merve/coco/resolve/main/annotations/instances_val2017.json"
-COCO_IMAGE_URL = "https://images.cocodataset.org/val2017/{image_id:012d}.jpg"
+# The official COCO image host currently presents a mismatched TLS certificate
+# from Colab.  This Hugging Face dataset mirror stores the same val2017 files
+# beside the annotation mirror and keeps certificate verification enabled.
+COCO_IMAGE_URL = "https://huggingface.co/datasets/merve/coco/resolve/main/val2017/{image_id:012d}.jpg"
 LORA_TARGET = r"^text_encoder\.encoder\.layer\.\d+\.attention\.self\.(query|value)$"
 
 
