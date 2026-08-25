@@ -1,0 +1,19 @@
+{
+  "study": "canonical-blip-coco-small-v1",
+  "model_id": "Salesforce/blip-itm-base-coco",
+  "model_revision": "98cf803d8586e8e8b3ec527885ac50c422d514ae",
+  "seed": 42,
+  "categories": ["person", "car", "dog", "cat"],
+  "train_per_class": 16,
+  "probe_per_class": 20,
+  "batch_size": 8,
+  "epochs": 2,
+  "learning_rate": 0.0001,
+  "weight_decay": 0.0,
+  "contrastive_temperature": 0.07,
+  "lora_dropout": 0.05,
+  "variants": [
+    {"name": "lora-r8", "rank": 8, "alpha": 16.0},
+    {"name": "lora-r16", "rank": 16, "alpha": 32.0}
+  ]
+}
