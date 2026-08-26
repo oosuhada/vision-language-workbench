@@ -14,6 +14,15 @@
   "lora_dropout": 0.05,
   "variants": [
     {"name": "lora-r8", "rank": 8, "alpha": 16.0},
-    {"name": "lora-r16", "rank": 16, "alpha": 32.0}
+    {"name": "lora-r16", "rank": 16, "alpha": 32.0},
+    {
+      "name": "lora-r8-hard-negative",
+      "rank": 8,
+      "alpha": 16.0,
+      "hard_negative": true,
+      "mining_policy": "different-id",
+      "hard_negative_margin": 0.2,
+      "hard_negative_weight": 1.0
+    }
   ]
 }

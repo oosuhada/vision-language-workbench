@@ -40,6 +40,8 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from workbench.drift import compare_snapshots
+from workbench.hard_negative_training import hard_negative_margin_loss
+from workbench.hard_negatives import mine_hard_negatives, write_hard_negative_jsonl
 from workbench.lora_research import LoRAPolicy, inject_lora
 from workbench.representations import load_snapshot, probe_snapshot, save_snapshot
 
@@ -246,6 +248,7 @@ def train_lora(
     variant: dict[str, Any],
     device: torch.device,
     dtype: torch.dtype,
+    hard_negatives: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     policy = LoRAPolicy(
         name=str(variant["name"]),
@@ -265,6 +268,8 @@ def train_lora(
     )
     generator = torch.Generator().manual_seed(int(config["seed"]))
     losses: list[float] = []
+    contrastive_losses: list[float] = []
+    hard_negative_losses: list[float] = []
     model.train()
     started = time.perf_counter()
     for epoch in range(int(config["epochs"])):
@@ -285,13 +290,45 @@ def train_lora(
                 text_features = F.normalize(model.text_proj(text), dim=-1)
                 logits = image_features @ text_features.T / float(config["contrastive_temperature"])
                 targets = torch.arange(len(batch), device=device)
-                loss = (F.cross_entropy(logits, targets) + F.cross_entropy(logits.T, targets)) / 2.0
+                contrastive_loss = (F.cross_entropy(logits, targets) + F.cross_entropy(logits.T, targets)) / 2.0
+                loss = contrastive_loss
+                hard_negative_loss = None
+                if hard_negatives is not None:
+                    mined = [hard_negatives[row["sample_id"]] for row in batch]
+                    negative_tokens = processor(
+                        text=[row["caption"] for row in mined], padding=True, return_tensors="pt"
+                    )
+                    negative_text = model.text_encoder(
+                        input_ids=negative_tokens["input_ids"].to(device),
+                        attention_mask=negative_tokens["attention_mask"].to(device),
+                        return_dict=True,
+                    ).last_hidden_state[:, 0]
+                    negative_features = F.normalize(model.text_proj(negative_text), dim=-1)
+                    hardness = torch.as_tensor(
+                        [row["cosine_similarity"] for row in mined], device=device, dtype=image_features.dtype
+                    ).clamp_min(0)
+                    hard_negative_loss = hard_negative_margin_loss(
+                        image_features,
+                        text_features,
+                        negative_features,
+                        margin=float(variant["hard_negative_margin"]),
+                        hardness=hardness,
+                    )
+                    loss = loss + float(variant["hard_negative_weight"]) * hard_negative_loss
             loss.backward()
             optimizer.step()
             losses.append(float(loss.detach().cpu()))
+            contrastive_losses.append(float(contrastive_loss.detach().cpu()))
+            if hard_negative_loss is not None:
+                hard_negative_losses.append(float(hard_negative_loss.detach().cpu()))
             for image in images:
                 image.close()
-            print(f"TRAIN variant={variant['name']} epoch={epoch + 1} step={len(losses)} loss={losses[-1]:.6f}", flush=True)
+            hard_text = f" hard_negative={hard_negative_losses[-1]:.6f}" if hard_negative_losses else ""
+            print(
+                f"TRAIN variant={variant['name']} epoch={epoch + 1} step={len(losses)} "
+                f"loss={losses[-1]:.6f} contrastive={contrastive_losses[-1]:.6f}{hard_text}",
+                flush=True,
+            )
     budget.update(
         {
             "epochs": int(config["epochs"]),
@@ -301,10 +338,63 @@ def train_lora(
             "initial_loss": losses[0],
             "final_loss": losses[-1],
             "mean_loss": float(np.mean(losses)),
+            "mean_contrastive_loss": float(np.mean(contrastive_losses)),
+            "mean_hard_negative_loss": float(np.mean(hard_negative_losses)) if hard_negative_losses else None,
+            "hard_negative": bool(hard_negatives is not None),
+            "hard_negative_config": {
+                key: variant[key]
+                for key in ("mining_policy", "hard_negative_margin", "hard_negative_weight")
+                if key in variant
+            },
             "training_seconds": time.perf_counter() - started,
         }
     )
     return budget
+
+
+def mine_training_negatives(
+    model: BlipForImageTextRetrieval,
+    processor: BlipProcessor,
+    train_records: list[dict[str, Any]],
+    output: Path,
+    config: dict[str, Any],
+    variant: dict[str, Any],
+    device: torch.device,
+    dtype: torch.dtype,
+) -> dict[str, dict[str, Any]]:
+    image, text, _ = core_embeddings(model, processor, train_records, device, dtype, int(config["batch_size"]))
+    ids = [row["sample_id"] for row in train_records]
+    labels = [row["label"] for row in train_records]
+    variant_dir = output / str(variant["name"])
+    image_path = variant_dir / "mining_image_representations.npz"
+    text_path = variant_dir / "mining_text_representations.npz"
+    metadata = {"variant": variant["name"], "split": "train", "purpose": "hard-negative-mining"}
+    save_snapshot(image_path, image, ids, labels, {**metadata, "modality": "image"})
+    save_snapshot(text_path, text, ids, labels, {**metadata, "modality": "text"})
+    result = mine_hard_negatives(
+        load_snapshot(image_path),
+        load_snapshot(text_path),
+        top_k=1,
+        policy=str(variant["mining_policy"]),
+        chunk_size=512,
+    )
+    write_json(variant_dir / "hard_negative_mining_summary.json", {key: value for key, value in result.items() if key != "items"})
+    write_hard_negative_jsonl(result, variant_dir / "hard_negatives.jsonl")
+    records_by_id = {row["sample_id"]: row for row in train_records}
+    mined: dict[str, dict[str, Any]] = {}
+    for item in result["items"]:
+        if not item["negatives"]:
+            raise RuntimeError(f"No hard negative for {item['anchor_id']}")
+        negative = item["negatives"][0]
+        candidate = records_by_id[str(negative["id"])]
+        mined[str(item["anchor_id"])] = {
+            "id": str(negative["id"]),
+            "caption": candidate["caption"],
+            "cosine_similarity": float(negative["cosine_similarity"]),
+        }
+    if len(mined) != len(train_records):
+        raise RuntimeError("Hard-negative mining did not cover every training pair.")
+    return mined
 
 
 def save_adapter(model: torch.nn.Module, output: Path, training: dict[str, Any]) -> None:
@@ -476,7 +566,21 @@ def main() -> None:
             continue
         variant = variant_map[name]
         model, processor = load_model(config, device, dtype)
-        training = train_lora(model, processor, train_records, config, variant, device, dtype)
+        hard_negatives = None
+        if variant.get("hard_negative"):
+            hard_negatives = mine_training_negatives(
+                model, processor, train_records, output, config, variant, device, dtype
+            )
+        training = train_lora(
+            model,
+            processor,
+            train_records,
+            config,
+            variant,
+            device,
+            dtype,
+            hard_negatives=hard_negatives,
+        )
         save_adapter(model, output / "adapters" / name, training)
         metrics = evaluate_variant(name, model, processor, probe_records, output, config, device, dtype, training)
         current = load_snapshot(output / name / "fused_representations.npz")
