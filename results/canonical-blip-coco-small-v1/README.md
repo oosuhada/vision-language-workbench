@@ -40,3 +40,16 @@ is 64/64, mean top-1 cosine similarity is 0.35994, and the 95th percentile is
 0.42436. The downloaded extension zip has SHA-256
 `4dfd23834f47f9ccd870e581ad203d8498616ff91302ed7b82a8711b20216107`.
 Its adapter was validated locally but, like the other adapters, is not committed.
+
+## Exact-checkpoint OOD extension
+
+The saved adapters from the first canonical runs were reloaded and evaluated
+without further training. Gaussian blur, Gaussian noise, JPEG compression,
+low light, and centered occlusion are generated lazily at severity 1–3; no
+corrupted image copies are committed. Each of the 15 conditions uses all 80
+held-out IDs. Results are under `ood/`.
+
+The OOD zip SHA-256 is
+`708c8016341248afe864581d5513661e0c5e7a09af0e6e60e6bbee6226bb79d6`.
+For all four variants, clean representations from the reloaded checkpoints
+match the canonical snapshots exactly (maximum absolute difference 0.0).

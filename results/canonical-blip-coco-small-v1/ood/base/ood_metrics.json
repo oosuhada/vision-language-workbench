@@ -1,0 +1,170 @@
+{
+  "clean_mean_r_at_1": 0.95625,
+  "condition_count": 15,
+  "conditions": [
+    {
+      "absolute_delta_r_at_1": -0.012499999999999956,
+      "corruption": "gaussian_blur",
+      "mean_r_at_1": 0.9437500000000001,
+      "mean_r_at_10": 1.0,
+      "mean_r_at_5": 1.0,
+      "retention_r_at_1": 0.9869281045751634,
+      "samples": 80,
+      "severity": 1
+    },
+    {
+      "absolute_delta_r_at_1": -0.012500000000000067,
+      "corruption": "gaussian_blur",
+      "mean_r_at_1": 0.94375,
+      "mean_r_at_10": 1.0,
+      "mean_r_at_5": 1.0,
+      "retention_r_at_1": 0.9869281045751633,
+      "samples": 80,
+      "severity": 2
+    },
+    {
+      "absolute_delta_r_at_1": -0.050000000000000044,
+      "corruption": "gaussian_blur",
+      "mean_r_at_1": 0.90625,
+      "mean_r_at_10": 0.9875,
+      "mean_r_at_5": 0.98125,
+      "retention_r_at_1": 0.9477124183006536,
+      "samples": 80,
+      "severity": 3
+    },
+    {
+      "absolute_delta_r_at_1": 0.0,
+      "corruption": "gaussian_noise",
+      "mean_r_at_1": 0.95625,
+      "mean_r_at_10": 1.0,
+      "mean_r_at_5": 1.0,
+      "retention_r_at_1": 1.0,
+      "samples": 80,
+      "severity": 1
+    },
+    {
+      "absolute_delta_r_at_1": -0.012499999999999956,
+      "corruption": "gaussian_noise",
+      "mean_r_at_1": 0.9437500000000001,
+      "mean_r_at_10": 1.0,
+      "mean_r_at_5": 1.0,
+      "retention_r_at_1": 0.9869281045751634,
+      "samples": 80,
+      "severity": 2
+    },
+    {
+      "absolute_delta_r_at_1": -0.018750000000000044,
+      "corruption": "gaussian_noise",
+      "mean_r_at_1": 0.9375,
+      "mean_r_at_10": 1.0,
+      "mean_r_at_5": 1.0,
+      "retention_r_at_1": 0.9803921568627451,
+      "samples": 80,
+      "severity": 3
+    },
+    {
+      "absolute_delta_r_at_1": -0.018750000000000044,
+      "corruption": "jpeg_compression",
+      "mean_r_at_1": 0.9375,
+      "mean_r_at_10": 1.0,
+      "mean_r_at_5": 1.0,
+      "retention_r_at_1": 0.9803921568627451,
+      "samples": 80,
+      "severity": 1
+    },
+    {
+      "absolute_delta_r_at_1": -0.018750000000000044,
+      "corruption": "jpeg_compression",
+      "mean_r_at_1": 0.9375,
+      "mean_r_at_10": 1.0,
+      "mean_r_at_5": 1.0,
+      "retention_r_at_1": 0.9803921568627451,
+      "samples": 80,
+      "severity": 2
+    },
+    {
+      "absolute_delta_r_at_1": -0.03125,
+      "corruption": "jpeg_compression",
+      "mean_r_at_1": 0.925,
+      "mean_r_at_10": 1.0,
+      "mean_r_at_5": 1.0,
+      "retention_r_at_1": 0.9673202614379085,
+      "samples": 80,
+      "severity": 3
+    },
+    {
+      "absolute_delta_r_at_1": -0.006250000000000089,
+      "corruption": "low_light",
+      "mean_r_at_1": 0.95,
+      "mean_r_at_10": 1.0,
+      "mean_r_at_5": 1.0,
+      "retention_r_at_1": 0.9934640522875816,
+      "samples": 80,
+      "severity": 1
+    },
+    {
+      "absolute_delta_r_at_1": -0.012500000000000067,
+      "corruption": "low_light",
+      "mean_r_at_1": 0.94375,
+      "mean_r_at_10": 1.0,
+      "mean_r_at_5": 1.0,
+      "retention_r_at_1": 0.9869281045751633,
+      "samples": 80,
+      "severity": 2
+    },
+    {
+      "absolute_delta_r_at_1": -0.025000000000000022,
+      "corruption": "low_light",
+      "mean_r_at_1": 0.93125,
+      "mean_r_at_10": 1.0,
+      "mean_r_at_5": 1.0,
+      "retention_r_at_1": 0.9738562091503268,
+      "samples": 80,
+      "severity": 3
+    },
+    {
+      "absolute_delta_r_at_1": -0.04375000000000007,
+      "corruption": "occlusion",
+      "mean_r_at_1": 0.9125,
+      "mean_r_at_10": 1.0,
+      "mean_r_at_5": 0.9875,
+      "retention_r_at_1": 0.9542483660130718,
+      "samples": 80,
+      "severity": 1
+    },
+    {
+      "absolute_delta_r_at_1": -0.1312500000000001,
+      "corruption": "occlusion",
+      "mean_r_at_1": 0.825,
+      "mean_r_at_10": 1.0,
+      "mean_r_at_5": 0.975,
+      "retention_r_at_1": 0.8627450980392156,
+      "samples": 80,
+      "severity": 2
+    },
+    {
+      "absolute_delta_r_at_1": -0.20625000000000004,
+      "corruption": "occlusion",
+      "mean_r_at_1": 0.75,
+      "mean_r_at_10": 0.98125,
+      "mean_r_at_5": 0.96875,
+      "retention_r_at_1": 0.7843137254901961,
+      "samples": 80,
+      "severity": 3
+    }
+  ],
+  "mean_ood_r_at_1": 0.9162499999999999,
+  "mean_retention_r_at_1": 0.958169934640523,
+  "variant": "base",
+  "worst_condition": {
+    "absolute_delta_r_at_1": -0.20625000000000004,
+    "corruption": "occlusion",
+    "mean_r_at_1": 0.75,
+    "mean_r_at_10": 0.98125,
+    "mean_r_at_5": 0.96875,
+    "retention_r_at_1": 0.7843137254901961,
+    "samples": 80,
+    "severity": 3
+  },
+  "worst_retention_r_at_1": 0.7843137254901961
+}

@@ -99,6 +99,22 @@ budget. It recovers 0.01250 R@1 over ordinary r=8 but remains 0.00625 below
 Base. Its 16-step mean hard-negative loss was 0.09550. No outcome-driven
 hyperparameter retry was performed.
 
+The exact saved canonical adapters were then evaluated on five lazy image
+corruptions at severity 1–3 (15 matched conditions, 80 samples each):
+
+| Variant | Clean R@1 | Mean OOD R@1 | Mean retention | Worst retention | Worst condition |
+|---|---:|---:|---:|---:|---|
+| Pretrained Base | 0.95625 | 0.91625 | 0.95817 | 0.78431 | occlusion s3 |
+| LoRA Q/V r=8 | 0.93750 | 0.91250 | 0.97333 | 0.80000 | occlusion s3 |
+| LoRA Q/V r=16 | 0.94375 | 0.91458 | 0.96909 | 0.80795 | occlusion s3 |
+| LoRA Q/V r=8 + mined hard negative | 0.95000 | 0.91542 | 0.96360 | 0.78947 | occlusion s3 |
+
+LoRA improves relative retention because it starts from a lower clean score,
+but Base still has the highest absolute mean OOD R@1. Occlusion is materially
+harder than blur, noise, JPEG, or low light for every variant. Clean
+representations re-extracted from the saved adapters match the canonical NPZ
+files exactly (maximum absolute difference 0.0).
+
 This is an actual A100/bfloat16 run, not a synthetic smoke test. Its pinned
 environment, sample IDs, confidence records, and representation NPZ files are
 stored under [`results/canonical-blip-coco-small-v1`](results/canonical-blip-coco-small-v1).
