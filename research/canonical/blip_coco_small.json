@@ -12,6 +12,13 @@
   "weight_decay": 0.0,
   "contrastive_temperature": 0.07,
   "lora_dropout": 0.05,
+  "ood_corruptions": {
+    "gaussian_blur": [1, 2, 3],
+    "gaussian_noise": [1, 2, 3],
+    "jpeg_compression": [1, 2, 3],
+    "low_light": [1, 2, 3],
+    "occlusion": [1, 2, 3]
+  },
   "variants": [
     {"name": "lora-r8", "rank": 8, "alpha": 16.0},
     {"name": "lora-r16", "rank": 16, "alpha": 32.0},

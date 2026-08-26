@@ -14,7 +14,9 @@ from collections import defaultdict
 from contextlib import nullcontext
 import csv
 from datetime import datetime, timezone
+import hashlib
 import importlib.metadata
+import io
 import json
 import os
 from pathlib import Path
@@ -28,7 +30,7 @@ import urllib.request
 import zipfile
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageDraw, ImageEnhance, ImageFilter
 import torch
 import torch.nn.functional as F
 from transformers import BlipForImageTextRetrieval, BlipProcessor
@@ -179,13 +181,23 @@ def core_embeddings(
     device: torch.device,
     dtype: torch.dtype,
     batch_size: int,
+    image_transform: Any | None = None,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     model.eval()
     image_rows: list[np.ndarray] = []
     text_rows: list[np.ndarray] = []
     with torch.inference_mode():
         for batch in batched(records, batch_size):
-            images = [Image.open(row["image_path"]).convert("RGB") for row in batch]
+            images: list[Image.Image] = []
+            for row in batch:
+                with Image.open(row["image_path"]) as source:
+                    image = source.convert("RGB")
+                if image_transform is not None:
+                    transformed = image_transform(image, row)
+                    if transformed is not image:
+                        image.close()
+                    image = transformed
+                images.append(image)
             encoded = processor(images=images, text=[row["caption"] for row in batch], padding=True, return_tensors="pt")
             pixel_values = encoded["pixel_values"].to(device=device, dtype=dtype)
             input_ids = encoded["input_ids"].to(device)
@@ -204,6 +216,96 @@ def core_embeddings(
     fused = image_matrix + text_matrix
     fused /= np.maximum(np.linalg.norm(fused, axis=1, keepdims=True), 1e-12)
     return image_matrix, text_matrix, fused
+
+
+def corrupt_image(image: Image.Image, row: dict[str, Any], name: str, severity: int, seed: int) -> Image.Image:
+    if severity not in {1, 2, 3}:
+        raise ValueError("OOD severity must be 1, 2, or 3.")
+    if name == "gaussian_blur":
+        return image.filter(ImageFilter.GaussianBlur(radius={1: 1.0, 2: 2.0, 3: 4.0}[severity]))
+    if name == "gaussian_noise":
+        digest = hashlib.sha256(f"{seed}:{row['sample_id']}:{severity}".encode()).digest()
+        rng = np.random.default_rng(int.from_bytes(digest[:8], "big"))
+        values = np.asarray(image, dtype=np.float32)
+        noise = rng.normal(0.0, {1: 8.0, 2: 16.0, 3: 32.0}[severity], size=values.shape)
+        return Image.fromarray(np.clip(values + noise, 0, 255).astype(np.uint8), mode="RGB")
+    if name == "jpeg_compression":
+        buffer = io.BytesIO()
+        image.save(buffer, format="JPEG", quality={1: 70, 2: 40, 3: 20}[severity])
+        buffer.seek(0)
+        with Image.open(buffer) as compressed:
+            return compressed.convert("RGB")
+    if name == "low_light":
+        return ImageEnhance.Brightness(image).enhance({1: 0.70, 2: 0.45, 3: 0.25}[severity])
+    if name == "occlusion":
+        result = image.copy()
+        fraction = {1: 0.10, 2: 0.20, 3: 0.35}[severity]
+        width = max(1, int(result.width * fraction**0.5))
+        height = max(1, int(result.height * fraction**0.5))
+        left = (result.width - width) // 2
+        top = (result.height - height) // 2
+        ImageDraw.Draw(result).rectangle((left, top, left + width, top + height), fill=(0, 0, 0))
+        return result
+    raise ValueError(f"Unknown OOD corruption: {name}")
+
+
+def evaluate_ood_variant(
+    name: str,
+    model: BlipForImageTextRetrieval,
+    processor: BlipProcessor,
+    probe_records: list[dict[str, Any]],
+    output: Path,
+    config: dict[str, Any],
+    device: torch.device,
+    dtype: torch.dtype,
+    clean_metrics: dict[str, Any],
+) -> dict[str, Any]:
+    clean_r1 = float(clean_metrics["retrieval"]["mean_r_at_1"])
+    conditions: list[dict[str, Any]] = []
+    for corruption, severities in config.get("ood_corruptions", {}).items():
+        for severity in severities:
+            transform = lambda image, row, c=corruption, s=int(severity): corrupt_image(
+                image, row, c, s, int(config["seed"])
+            )
+            image, text, _ = core_embeddings(
+                model,
+                processor,
+                probe_records,
+                device,
+                dtype,
+                int(config["batch_size"]),
+                image_transform=transform,
+            )
+            retrieval, _ = retrieval_metrics(image, text, float(config["contrastive_temperature"]))
+            ood_r1 = float(retrieval["mean_r_at_1"])
+            row = {
+                "corruption": corruption,
+                "severity": int(severity),
+                "samples": len(probe_records),
+                "mean_r_at_1": ood_r1,
+                "mean_r_at_5": float(retrieval["mean_r_at_5"]),
+                "mean_r_at_10": float(retrieval["mean_r_at_10"]),
+                "absolute_delta_r_at_1": ood_r1 - clean_r1,
+                "retention_r_at_1": ood_r1 / clean_r1 if clean_r1 else 0.0,
+            }
+            conditions.append(row)
+            print(
+                f"OOD variant={name} corruption={corruption} severity={severity} "
+                f"r_at_1={ood_r1:.6f} retention={row['retention_r_at_1']:.6f}",
+                flush=True,
+            )
+    result = {
+        "variant": name,
+        "clean_mean_r_at_1": clean_r1,
+        "condition_count": len(conditions),
+        "mean_ood_r_at_1": float(np.mean([row["mean_r_at_1"] for row in conditions])),
+        "mean_retention_r_at_1": float(np.mean([row["retention_r_at_1"] for row in conditions])),
+        "worst_retention_r_at_1": float(min(row["retention_r_at_1"] for row in conditions)),
+        "worst_condition": min(conditions, key=lambda row: row["retention_r_at_1"]),
+        "conditions": conditions,
+    }
+    write_json(output / name / "ood_metrics.json", result)
+    return result
 
 
 def retrieval_metrics(image: np.ndarray, text: np.ndarray, temperature: float) -> tuple[dict[str, Any], list[dict[str, Any]]]:
@@ -457,7 +559,7 @@ def result_row(metrics: dict[str, Any], drift: dict[str, Any] | None) -> dict[st
     training = metrics.get("training") or {}
     representation = metrics["representation"]
     retrieval = metrics["retrieval"]
-    return {
+    row = {
         "variant": metrics["variant"],
         "trainable_parameters": int(training.get("trainable_parameters_after_injection", 0)),
         "trainable_parameter_pct": float(training.get("adapter_fraction_of_base", 0.0) * 100.0),
@@ -471,6 +573,15 @@ def result_row(metrics: dict[str, Any], drift: dict[str, Any] | None) -> dict[st
         "mean_cosine_drift": 0.0 if drift is None else drift["sample_cosine"]["mean_drift"],
         "evaluation_seconds": metrics["evaluation_seconds"],
     }
+    if metrics.get("ood"):
+        row.update(
+            {
+                "ood_mean_r_at_1": metrics["ood"]["mean_ood_r_at_1"],
+                "ood_mean_retention_r_at_1": metrics["ood"]["mean_retention_r_at_1"],
+                "ood_worst_retention_r_at_1": metrics["ood"]["worst_retention_r_at_1"],
+            }
+        )
+    return row
 
 
 def write_comparison(output: Path, rows: list[dict[str, Any]]) -> None:
@@ -555,6 +666,11 @@ def main() -> None:
     if "base" in requested:
         model, processor = load_model(config, device, dtype)
         all_metrics["base"] = evaluate_variant("base", model, processor, probe_records, output, config, device, dtype, None)
+        if config.get("ood_corruptions"):
+            all_metrics["base"]["ood"] = evaluate_ood_variant(
+                "base", model, processor, probe_records, output, config, device, dtype, all_metrics["base"]
+            )
+            write_json(output / "base" / "metrics.json", all_metrics["base"])
         del model
         torch.cuda.empty_cache()
         print("COMPLETE variant=base", flush=True)
@@ -583,6 +699,10 @@ def main() -> None:
         )
         save_adapter(model, output / "adapters" / name, training)
         metrics = evaluate_variant(name, model, processor, probe_records, output, config, device, dtype, training)
+        if config.get("ood_corruptions"):
+            metrics["ood"] = evaluate_ood_variant(
+                name, model, processor, probe_records, output, config, device, dtype, metrics
+            )
         current = load_snapshot(output / name / "fused_representations.npz")
         drift = compare_snapshots(base_snapshot, current, top_k=10)
         write_json(output / name / "drift_vs_base.json", drift)
