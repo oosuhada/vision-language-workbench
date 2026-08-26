@@ -1,0 +1,3 @@
+variant,trainable_parameters,trainable_parameter_pct,retrieval_mean_r_at_1,retrieval_mean_r_at_5,retrieval_mean_r_at_10,linear_probe_accuracy,class_separation,anisotropy,cka_vs_base,mean_cosine_drift,evaluation_seconds
+base,0,0.0,0.95625,1.0,1.0,1.0,-0.22853610018952164,0.41490617283588915,1.0,0.0,1.7372850149999977
+lora-r8-hard-negative,294912,0.1318076283325224,0.95,1.0,1.0,1.0,-0.22647220238553034,0.3988671447012042,0.9999563440733051,0.00027497305954569116,1.3729858289999584

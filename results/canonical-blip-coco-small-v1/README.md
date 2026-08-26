@@ -25,9 +25,18 @@ weights are intentionally not committed.
 | Base | 0 (0.0000%) | 0.95625 | 1.00000 | 1.00000 | 1.00000 | 1.000000 | 0.000000 |
 | LoRA Q/V r=8 | 294,912 (0.1318%) | 0.93750 | 1.00000 | 1.00000 | 1.00000 | 0.999953 | 0.000300 |
 | LoRA Q/V r=16 | 589,824 (0.2636%) | 0.94375 | 1.00000 | 1.00000 | 1.00000 | 0.999850 | 0.000862 |
+| LoRA Q/V r=8 + mined hard negative | 294,912 (0.1318%) | 0.95000 | 1.00000 | 1.00000 | 1.00000 | 0.999956 | 0.000275 |
 
 Both LoRA variants target 24 text-encoder self-attention Q/V linear modules.
 They use rank-scaled alpha (16 for r=8; 32 for r=16), dropout 0.05, batch size
 8, two epochs, 16 steps, learning rate 1e-4, and seed 42. The first normal run
 is canonical; no seed, split, rank, or epoch was changed in response to the
 measured regression.
+
+The hard-negative extension uses the same seed, 64 train pairs, 80 held-out
+pairs, rank, optimizer, and 16-step budget as ordinary r=8. Base embeddings
+mine one nearest different-ID caption for every training image. Mining coverage
+is 64/64, mean top-1 cosine similarity is 0.35994, and the 95th percentile is
+0.42436. The downloaded extension zip has SHA-256
+`4dfd23834f47f9ccd870e581ad203d8498616ff91302ed7b82a8711b20216107`.
+Its adapter was validated locally but, like the other adapters, is not committed.

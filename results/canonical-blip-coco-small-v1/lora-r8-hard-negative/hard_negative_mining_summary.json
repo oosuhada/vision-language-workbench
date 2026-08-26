@@ -1,0 +1,8 @@
+{
+  "anchor_samples": 64,
+  "candidate_samples": 64,
+  "mean_top1_similarity": 0.35993965757554747,
+  "p95_top1_similarity": 0.42435619014869663,
+  "policy": "different-id",
+  "top_k": 1
+}

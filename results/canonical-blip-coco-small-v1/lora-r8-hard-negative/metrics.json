@@ -1,0 +1,360 @@
+{
+  "drift_vs_base": {
+    "anisotropy": {
+      "baseline": 0.41490617283588915,
+      "current": 0.3988671447012042,
+      "delta": -0.01603902813468494
+    },
+    "baseline_dimensions": 256,
+    "baseline_metadata": {
+      "modality": "fused",
+      "model": "Salesforce/blip-itm-base-coco",
+      "revision": "98cf803d8586e8e8b3ec527885ac50c422d514ae",
+      "split": "probe",
+      "variant": "base"
+    },
+    "class_centroid_drift": {
+      "mean_cosine_drift": 0.000302873358254685,
+      "per_class": {
+        "car": 0.0002265847509015373,
+        "cat": 0.0003672597154549262,
+        "dog": 0.0004007062017289398,
+        "person": 0.00021694276493333664
+      }
+    },
+    "class_geometry": {
+      "baseline": {
+        "between_class_centroid_cosine": 0.7330945571931692,
+        "separation_margin": -0.22853610018952164,
+        "within_class_cosine": 0.5045584570036475
+      },
+      "current": {
+        "between_class_centroid_cosine": 0.7179780070490663,
+        "separation_margin": -0.22647220238553034,
+        "within_class_cosine": 0.491505804663536
+      },
+      "separation_margin_delta": 0.002063897803991299
+    },
+    "current_dimensions": 256,
+    "current_metadata": {
+      "modality": "fused",
+      "model": "Salesforce/blip-itm-base-coco",
+      "revision": "98cf803d8586e8e8b3ec527885ac50c422d514ae",
+      "split": "probe",
+      "variant": "lora-r8-hard-negative"
+    },
+    "linear_cka": 0.9999563440733051,
+    "matched_samples": 80,
+    "most_drifted_samples": [
+      {
+        "cosine_drift": 0.0005229908524246873,
+        "cosine_similarity": 0.9994770091475753,
+        "id": "coco-val2017-000000419379"
+      },
+      {
+        "cosine_drift": 0.0004591577701362759,
+        "cosine_similarity": 0.9995408422298637,
+        "id": "coco-val2017-000000082807"
+      },
+      {
+        "cosine_drift": 0.0004198045675037898,
+        "cosine_similarity": 0.9995801954324962,
+        "id": "coco-val2017-000000366141"
+      },
+      {
+        "cosine_drift": 0.00041692620089694987,
+        "cosine_similarity": 0.999583073799103,
+        "id": "coco-val2017-000000267300"
+      },
+      {
+        "cosine_drift": 0.00040843689874092703,
+        "cosine_similarity": 0.9995915631012591,
+        "id": "coco-val2017-000000316015"
+      },
+      {
+        "cosine_drift": 0.0003916229770561941,
+        "cosine_similarity": 0.9996083770229438,
+        "id": "coco-val2017-000000014831"
+      },
+      {
+        "cosine_drift": 0.00038357998778382196,
+        "cosine_similarity": 0.9996164200122162,
+        "id": "coco-val2017-000000106389"
+      },
+      {
+        "cosine_drift": 0.0003825904141860903,
+        "cosine_similarity": 0.9996174095858139,
+        "id": "coco-val2017-000000109055"
+      },
+      {
+        "cosine_drift": 0.0003776181694242764,
+        "cosine_similarity": 0.9996223818305757,
+        "id": "coco-val2017-000000078420"
+      },
+      {
+        "cosine_drift": 0.0003773705016214546,
+        "cosine_similarity": 0.9996226294983785,
+        "id": "coco-val2017-000000138492"
+      }
+    ],
+    "sample_cosine": {
+      "mean_drift": 0.00027497305954569116,
+      "mean_similarity": 0.9997250269404543,
+      "median_drift": 0.0002718506931759235,
+      "p95_drift": 0.00040886136384872817
+    }
+  },
+  "evaluation_seconds": 1.3729858289999584,
+  "probe_samples": 80,
+  "representation": {
+    "anisotropy": 0.3988671447012042,
+    "class_count": 4,
+    "class_separation": {
+      "between_class_centroid_cosine": 0.7179780070490663,
+      "separation_margin": -0.22647220238553034,
+      "within_class_cosine": 0.491505804663536
+    },
+    "dimensions": 256,
+    "linear_probe": {
+      "classes": [
+        "car",
+        "cat",
+        "dog",
+        "person"
+      ],
+      "ridge": 1.0,
+      "test_accuracy": 1.0,
+      "test_samples": 20,
+      "train_accuracy": 1.0,
+      "train_samples": 60
+    },
+    "metadata": {
+      "modality": "fused",
+      "model": "Salesforce/blip-itm-base-coco",
+      "revision": "98cf803d8586e8e8b3ec527885ac50c422d514ae",
+      "split": "probe",
+      "variant": "lora-r8-hard-negative"
+    },
+    "samples": 80
+  },
+  "retrieval": {
+    "image_to_text_median_rank": 1.0,
+    "image_to_text_nll": 1.1096513617783785,
+    "image_to_text_r_at_1": 0.975,
+    "image_to_text_r_at_10": 1.0,
+    "image_to_text_r_at_5": 1.0,
+    "mean_r_at_1": 0.95,
+    "mean_r_at_10": 1.0,
+    "mean_r_at_5": 1.0,
+    "samples": 80,
+    "text_to_image_median_rank": 1.0,
+    "text_to_image_r_at_1": 0.925,
+    "text_to_image_r_at_10": 1.0,
+    "text_to_image_r_at_5": 1.0
+  },
+  "training": {
+    "adapter_fraction_of_base": 0.001318076283325224,
+    "adapter_parameters": 294912,
+    "base_parameters": 223744258,
+    "epochs": 2,
+    "final_loss": 0.43519675731658936,
+    "hard_negative": true,
+    "hard_negative_config": {
+      "hard_negative_margin": 0.2,
+      "hard_negative_weight": 1.0,
+      "mining_policy": "different-id"
+    },
+    "initial_loss": 0.27873915433883667,
+    "learning_rate": 0.0001,
+    "matched_modules": 24,
+    "mean_contrastive_loss": 0.2095935344696045,
+    "mean_hard_negative_loss": 0.0955003947019577,
+    "mean_loss": 0.3050939291715622,
+    "policy": {
+      "alpha": 16.0,
+      "dropout": 0.05,
+      "freeze_base": true,
+      "name": "lora-r8-hard-negative",
+      "rank": 8,
+      "target_regex": [
+        "^text_encoder\\.encoder\\.layer\\.\\d+\\.attention\\.self\\.(query|value)$"
+      ],
+      "target_suffixes": []
+    },
+    "samples": 64,
+    "steps": 16,
+    "targets": [
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.0.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.0.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.1.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.1.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.2.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.2.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.3.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.3.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.4.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.4.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.5.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.5.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.6.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.6.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.7.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.7.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.8.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.8.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.9.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.9.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.10.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.10.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.11.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.11.attention.self.value",
+        "out_features": 768
+      }
+    ],
+    "trainable_parameters_after_injection": 294912,
+    "training_seconds": 3.485907146000045
+  },
+  "variant": "lora-r8-hard-negative"
+}

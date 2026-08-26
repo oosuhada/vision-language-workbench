@@ -1,0 +1,105 @@
+{
+  "anisotropy": {
+    "baseline": 0.41490617283588915,
+    "current": 0.3988671447012042,
+    "delta": -0.01603902813468494
+  },
+  "baseline_dimensions": 256,
+  "baseline_metadata": {
+    "modality": "fused",
+    "model": "Salesforce/blip-itm-base-coco",
+    "revision": "98cf803d8586e8e8b3ec527885ac50c422d514ae",
+    "split": "probe",
+    "variant": "base"
+  },
+  "class_centroid_drift": {
+    "mean_cosine_drift": 0.000302873358254685,
+    "per_class": {
+      "car": 0.0002265847509015373,
+      "cat": 0.0003672597154549262,
+      "dog": 0.0004007062017289398,
+      "person": 0.00021694276493333664
+    }
+  },
+  "class_geometry": {
+    "baseline": {
+      "between_class_centroid_cosine": 0.7330945571931692,
+      "separation_margin": -0.22853610018952164,
+      "within_class_cosine": 0.5045584570036475
+    },
+    "current": {
+      "between_class_centroid_cosine": 0.7179780070490663,
+      "separation_margin": -0.22647220238553034,
+      "within_class_cosine": 0.491505804663536
+    },
+    "separation_margin_delta": 0.002063897803991299
+  },
+  "current_dimensions": 256,
+  "current_metadata": {
+    "modality": "fused",
+    "model": "Salesforce/blip-itm-base-coco",
+    "revision": "98cf803d8586e8e8b3ec527885ac50c422d514ae",
+    "split": "probe",
+    "variant": "lora-r8-hard-negative"
+  },
+  "linear_cka": 0.9999563440733051,
+  "matched_samples": 80,
+  "most_drifted_samples": [
+    {
+      "cosine_drift": 0.0005229908524246873,
+      "cosine_similarity": 0.9994770091475753,
+      "id": "coco-val2017-000000419379"
+    },
+    {
+      "cosine_drift": 0.0004591577701362759,
+      "cosine_similarity": 0.9995408422298637,
+      "id": "coco-val2017-000000082807"
+    },
+    {
+      "cosine_drift": 0.0004198045675037898,
+      "cosine_similarity": 0.9995801954324962,
+      "id": "coco-val2017-000000366141"
+    },
+    {
+      "cosine_drift": 0.00041692620089694987,
+      "cosine_similarity": 0.999583073799103,
+      "id": "coco-val2017-000000267300"
+    },
+    {
+      "cosine_drift": 0.00040843689874092703,
+      "cosine_similarity": 0.9995915631012591,
+      "id": "coco-val2017-000000316015"
+    },
+    {
+      "cosine_drift": 0.0003916229770561941,
+      "cosine_similarity": 0.9996083770229438,
+      "id": "coco-val2017-000000014831"
+    },
+    {
+      "cosine_drift": 0.00038357998778382196,
+      "cosine_similarity": 0.9996164200122162,
+      "id": "coco-val2017-000000106389"
+    },
+    {
+      "cosine_drift": 0.0003825904141860903,
+      "cosine_similarity": 0.9996174095858139,
+      "id": "coco-val2017-000000109055"
+    },
+    {
+      "cosine_drift": 0.0003776181694242764,
+      "cosine_similarity": 0.9996223818305757,
+      "id": "coco-val2017-000000078420"
+    },
+    {
+      "cosine_drift": 0.0003773705016214546,
+      "cosine_similarity": 0.9996226294983785,
+      "id": "coco-val2017-000000138492"
+    }
+  ],
+  "sample_cosine": {
+    "mean_drift": 0.00027497305954569116,
+    "mean_similarity": 0.9997250269404543,
+    "median_drift": 0.0002718506931759235,
+    "p95_drift": 0.00040886136384872817
+  }
+}
