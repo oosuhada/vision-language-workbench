@@ -1,81 +1,119 @@
-# Vision Language Workbench
+# Vision Language Workbench — Reproducible Vision-Language Research
 
 Vision Language Workbench keeps the proven LAVIS model, processor, dataset,
-task, runner, training, and evaluation code intact while adding a lightweight
-experiment layer for repeatable local and GPU runs.
+task, runner, training, and evaluation code intact while adding a research
+layer for reproducible representation analysis, LoRA experiments,
+hard-negative training and clean/OOD comparison.
 
-The goal is not to reimplement BLIP, BLIP-2, ALBEF, CLIP, VQA, captioning, or
-retrieval. Those capabilities already exist in the included LAVIS codebase.
-This project adds a small workflow around them so an experiment can be defined,
-reviewed, executed, and traced without editing shell scripts for every run.
+Vision Language Workbench는 검증된 LAVIS의 model, processor, dataset, task,
+runner, training, evaluation 구현을 그대로 활용하면서 **representation 분석,
+LoRA 실험, hard-negative 학습, clean/OOD 비교를 재현 가능하게 연결하는
+vision-language research workbench**입니다.
 
-## What is added
+The project does not reimplement BLIP, BLIP-2, ALBEF or CLIP. It treats the
+existing model stack as the execution engine and focuses on experiment design,
+measurement, provenance and research interpretation.
 
-- YAML/JSON experiment manifests.
-- Deterministic command planning for `train.py` and `evaluate.py`.
-- Config and manifest fingerprints for reproducibility.
-- A run ledger that records the exact plan and exit status.
-- Frozen representation snapshots and linear/geometry probes.
-- A compact CLI: `vl-workbench`.
+이 프로젝트는 BLIP, BLIP-2, ALBEF, CLIP을 다시 구현하지 않습니다. 기존
+모델 스택을 execution engine으로 사용하고, 그 위에 실험 설계·측정·provenance·
+연구 해석을 추가합니다.
 
-## Quick start
+## Overview / 개요
 
-Create a manifest:
+The workbench is organized around four research questions.
 
-```yaml
-name: clip-coco-retrieval-eval
-mode: evaluate
-cfg_path: projects/clip/exp_coco_ret_eval.yaml
-options:
-  run.num_workers: 4
-tags:
-  - retrieval
-  - clip
-```
+이 워크벤치는 다음 네 가지 연구 질문을 중심으로 구성됩니다.
 
-Inspect the exact command without launching a model:
+- **Ⅰ Measure** — how well does the pretrained/fine-tuned model retrieve and separate held-out examples?<br>
+  pretrained/fine-tuned 모델이 held-out sample을 얼마나 잘 retrieval하고 representation을 분리하는가?
+- **Ⅱ Adapt** — how do LoRA rank/target policies change performance with a bounded trainable-parameter budget?<br>
+  제한된 trainable parameter budget에서 LoRA rank/target policy가 성능을 어떻게 바꾸는가?
+- **Ⅲ Stress** — what happens under mined hard negatives and image corruptions such as blur, noise and occlusion?<br>
+  mined hard negative와 blur/noise/occlusion 같은 image corruption에서 어떤 변화가 나타나는가?
+- **Ⅳ Trace** — can the exact experiment, checkpoint lineage and downstream evaluation be reconstructed later?<br>
+  실험·checkpoint lineage·downstream evaluation을 나중에도 정확히 재구성할 수 있는가?
+
+## Problem / 문제
+
+Small vision-language fine-tuning experiments are easy to run but surprisingly
+easy to misread: a higher training score may hide clean retrieval regression,
+relative OOD retention can improve from a weaker clean baseline, and a
+single-seed hard-negative gain may disappear when the candidate pool changes.
+
+소규모 vision-language fine-tuning은 실행 자체는 쉽지만 해석을 잘못하기
+쉽습니다. Training score가 좋아져도 clean retrieval은 떨어질 수 있고,
+낮아진 clean baseline 때문에 상대 OOD retention만 좋아 보일 수 있으며,
+single-seed hard-negative 개선은 candidate pool이 바뀌면 사라질 수 있습니다.
+
+This workbench makes those trade-offs explicit by keeping data allocation,
+training policy, representation movement, OOD stress and downstream evaluation
+in one reproducible lineage.
+
+이 워크벤치는 data allocation, training policy, representation 변화, OOD stress,
+downstream evaluation을 하나의 reproducible lineage로 연결해 이러한 trade-off를
+명확하게 드러냅니다.
+
+## Research walkthrough / 프로젝트 화면
+
+This project is a CLI/research workbench rather than a web application, so the
+primary user-facing surfaces are reproducible commands and generated reports.
+Colab screenshots are kept separately as GPU-execution evidence instead of
+being presented as the product UI.
+
+이 프로젝트는 웹앱이 아니라 CLI/research workbench이므로 실제 프로젝트
+화면은 **명령 실행과 생성된 report/result artifact**입니다. Colab 화면은
+제품 UI가 아니라 GPU 실험 수행 증거로 별도 섹션에 배치합니다.
+
+### 1. Experiment planning / 실험 계획
 
 ```bash
 vl-workbench plan experiments/clip-coco.yaml
-```
-
-Execute the same plan and record it:
-
-```bash
-vl-workbench run experiments/clip-coco.yaml
-```
-
-Review recent execution provenance without opening model logs:
-
-```bash
-vl-workbench history --limit 10
-
-# expand 4 concrete LAVIS runs without writing duplicate scripts
 vl-workbench sweep-plan experiments/clip-coco-retrieval-sweep.yaml
-
-# optionally materialize the variants as ordinary manifests
-vl-workbench sweep-materialize experiments/clip-coco-retrieval-sweep.yaml
-
-# inspect the output directory declared by the underlying LAVIS config
-vl-workbench artifacts experiments/blip-caption-resume-example.yaml
-
-# continue training from the newest checkpoint without hand-editing LAVIS YAML
-vl-workbench resume-plan experiments/blip-caption-resume-example.yaml
 ```
 
-The ledger stores only compact run metadata under `artifacts/` and is ignored by
-Git, so model outputs and large generated files do not pollute repository history.
+### 2. Representation analysis / 표현 공간 분석
 
-## Measured results
+```bash
+vl-workbench extract-features probes.jsonl \
+  --model-name blip_feature_extractor --model-type base \
+  --mode image --output artifacts/blip-base-image.npz
 
-### End-to-end experiment record
+vl-workbench probe artifacts/blip-base-image.npz
+vl-workbench drift artifacts/base.npz artifacts/lora-r8.npz
+```
 
-This repository now contains two real-data canonical studies, not only local
-or synthetic validation. The first study established the full workflow on a
-Google Colab A100; the harder v2 study then repeated the experiment over three
-seeds with a larger held-out retrieval pool and stronger occlusion stress.
+### 3. Hard-negative research / Hard-negative 연구
 
-The research loop is:
+```bash
+vl-workbench hard-negatives artifacts/images.npz \
+  --candidates artifacts/text.npz \
+  --policy different-id --top-k 10
+```
+
+### 4. Canonical measured report / Canonical 실측 리포트
+
+The generated result directories contain seed-level configs, comparison JSON,
+paired statistics, OOD summaries and research lineage instead of only terminal
+logs.
+
+생성된 result directory에는 단순 terminal log가 아니라 seed별 config,
+comparison JSON, paired statistics, OOD summary, research lineage가 함께
+남습니다.
+
+[`results/canonical-blip-coco-harder-multiseed-v2`](results/canonical-blip-coco-harder-multiseed-v2)
+
+## Current capabilities / 현재 기능
+
+| Capability / 기능 | Current implementation / 현재 구현 |
+|---|---|
+| Experiment orchestration / 실험 실행 | YAML/JSON manifests, deterministic command planning, sweeps, provenance ledger |
+| Representation research / 표현 분석 | frozen snapshots, ridge linear probe, anisotropy, class separation, CKA, cosine drift |
+| LoRA research / LoRA 연구 | target/rank policy, trainable-parameter budget, generic `nn.Linear` injection |
+| Hard-negative learning / Hard-negative 학습 | embedding mining → retrieval dataset → BLIP margin-loss training |
+| OOD evaluation / OOD 평가 | lazy blur/noise/JPEG/low-light/occlusion corruption, severity control |
+| Reproducibility / 재현성 | pinned model revision, seed-level manifests, SHA-256 artifacts, cross-repo lineage |
+
+## Research loop / 연구 루프
 
 ```text
 LAVIS / pretrained BLIP
@@ -93,8 +131,85 @@ multimodal-eval-workbench
 calibration + paired statistics + Pareto / replication analysis
 ```
 
+The loop deliberately separates **training evidence** from **evaluation
+interpretation**. Vision Language Workbench owns the measured model artifacts;
+Multimodal Eval Workbench owns calibration, statistical comparison and model
+selection analysis.
+
+이 루프는 **학습 근거**와 **평가 해석**을 의도적으로 분리합니다. Vision
+Language Workbench는 measured model artifact를 담당하고, Multimodal Eval
+Workbench는 calibration, 통계 비교, model selection 분석을 담당합니다.
+
+## Quick start / 빠른 시작
+
+Create a manifest / manifest 작성:
+
+```yaml
+name: clip-coco-retrieval-eval
+mode: evaluate
+cfg_path: projects/clip/exp_coco_ret_eval.yaml
+options:
+  run.num_workers: 4
+tags:
+  - retrieval
+  - clip
+```
+
+Inspect the exact command without launching a model / 모델을 로드하지 않고 실행 계획 확인:
+
+```bash
+vl-workbench plan experiments/clip-coco.yaml
+```
+
+Execute the same plan and record it / 동일 계획 실행 및 provenance 기록:
+
+```bash
+vl-workbench run experiments/clip-coco.yaml
+```
+
+Review recent execution provenance / 최근 실행 이력 확인:
+
+```bash
+vl-workbench history --limit 10
+
+# expand 4 concrete LAVIS runs without writing duplicate scripts
+vl-workbench sweep-plan experiments/clip-coco-retrieval-sweep.yaml
+
+# optionally materialize the variants as ordinary manifests
+vl-workbench sweep-materialize experiments/clip-coco-retrieval-sweep.yaml
+
+# inspect the output directory declared by the underlying LAVIS config
+vl-workbench artifacts experiments/blip-caption-resume-example.yaml
+
+# continue training from the newest checkpoint without hand-editing LAVIS YAML
+vl-workbench resume-plan experiments/blip-caption-resume-example.yaml
+```
+
+The ledger stores only compact run metadata under `artifacts/`; large model
+outputs remain outside Git history.
+
+`artifacts/`에는 compact run metadata만 저장하고 큰 model output은 Git
+history에 넣지 않습니다.
+
+## Measured results / 실측 결과
+
+### Experiment evidence / 실험 증거
+
+This repository now contains two real-data canonical studies, not only local
+or synthetic validation. The first study established the full workflow on a
+Google Colab A100; the harder v2 study then repeated the experiment over three
+seeds with a larger held-out retrieval pool and stronger occlusion stress.
+
+이 레포에는 local/synthetic validation만 있는 것이 아니라 두 번의 실제
+canonical study가 있습니다. 첫 실험은 Google Colab A100에서 전체 workflow를
+검증했고, harder v2는 더 큰 held-out retrieval pool과 강한 occlusion 조건에서
+3개 seed로 반복했습니다.
+
 The following screenshots are preserved from the first canonical A100 study
 and are committed as experiment evidence rather than decorative assets.
+
+아래 이미지는 제품 화면이 아니라 실제 A100 실행과 측정 과정을 보존한
+**experiment evidence**입니다.
 
 **A100 runtime selected**
 
@@ -134,7 +249,7 @@ deletion.
 
 ![Harder v2 runtime disconnected and deleted](results/canonical-blip-coco-harder-multiseed-v2/screenshots/04-runtime-disconnected-deleted.png)
 
-#### Harder v2 execution timeline
+#### Harder v2 execution timeline / v2 실행 이력
 
 | Stage | Evidence |
 |---|---|
@@ -151,7 +266,7 @@ This sequence is part of the research result: bugs and performance fixes were
 resolved without changing the declared seeds, model revision, train/probe
 counts, optimizer budget, or evaluation conditions.
 
-### Harder multi-seed v2
+### Harder multi-seed v2 / 더 어려운 3-seed 재현 실험
 
 The larger canonical follow-up uses 128 training pairs, 256 held-out probe
 pairs, seeds 42/1337/2026, and 17 OOD conditions including occlusion severity
@@ -161,11 +276,17 @@ to 0.88431 versus Base's 0.87951, but the paired n=3 CI crosses zero. Mined hard
 negatives tie ordinary r8 on clean R@1 and add only +0.00084 mean OOD R@1, also
 inconclusive at three seeds. CKA remains 0.99837–0.99954.
 
+더 어려운 v2에서는 Base가 clean R@1 `0.85612`로 가장 높았고, LoRA r8/r16은
+세 seed 모두에서 clean 성능이 낮았습니다. r8의 상대 retention은 높아졌지만
+95% CI가 0을 포함했고, hard-negative는 ordinary r8의 clean R@1을 전혀
+회복하지 못했습니다. Representation CKA는 여전히 `0.99837–0.99954`로 매우
+높았습니다.
+
 Full seed-level metrics, Student-t intervals, paired hard-negative deltas, and
 occlusion severity 4–5 results are in
 [`results/canonical-blip-coco-harder-multiseed-v2`](results/canonical-blip-coco-harder-multiseed-v2).
 
-### First canonical study
+### First canonical study / 첫 canonical 실험
 
 The first canonical study uses the real
 [COCO 2017](https://cocodataset.org/#download) validation images and human
@@ -174,6 +295,11 @@ captions with the pretrained
 checkpoint. A deterministic, leakage-free subset contains 64 training pairs
 and 80 held-out probe pairs across `person`, `car`, `dog`, and `cat`. Mean
 retrieval recall is the average of image-to-text and text-to-image recall.
+
+첫 canonical study는 실제 COCO 2017 validation image/caption을 사용하고,
+`person`, `car`, `dog`, `cat` 네 class에서 64개 train pair와 80개 held-out
+probe pair를 leakage 없이 구성했습니다. Retrieval recall은 image-to-text와
+text-to-image의 평균입니다.
 
 | Variant | Trainable parameters | Trainable % | Mean R@1 | Mean R@5 | Mean R@10 | Linear probe | Class separation | Anisotropy |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -231,7 +357,7 @@ downloads or GPU initialization.
 The underlying execution still goes through the original LAVIS entrypoints:
 `train.py` and `evaluate.py`.
 
-## Representation research
+## Representation research / 표현 공간 연구
 
 Intermediate LAVIS representations can be captured as reusable NumPy snapshots
 and analyzed without repeatedly loading model weights. The extractor calls the
@@ -276,7 +402,7 @@ and the samples whose representations moved the most. CKA remains valid even
 when the compared feature dimensions differ; direct cosine metrics are emitted
 when dimensions match.
 
-## Hard-negative mining
+## Hard-negative mining / Hard-negative 마이닝
 
 Use the same saved representation space to find examples the current model is
 most likely to confuse:
@@ -302,7 +428,7 @@ Mining is cosine-nearest-neighbor based and chunked to avoid allocating the
 entire similarity matrix. The resulting JSONL can be consumed by later
 fine-tuning data builders without changing the bundled LAVIS encoders.
 
-## LoRA placement research
+## LoRA placement research / LoRA 배치 연구
 
 The bundled xInstructBLIP code already uses PEFT LoRA for its LLM path. The
 workbench adds a generic research policy for any LAVIS `nn.Linear` tree so LoRA
@@ -316,7 +442,7 @@ low-rank residuals while preserving the underlying LAVIS architecture.
 This supports controlled studies such as Q/V rank 8 vs 16, projection-only
 LoRA, or vision/Q-Former/LLM placement at a known trainable-parameter budget.
 
-## Hard negatives in the training loop
+## Hard negatives in the training loop / 학습 루프 연결
 
 Mined neighbors can now be joined back to the original probe JSONL as concrete
 LAVIS retrieval annotations with `materialize_hard_negative_annotations()`.
@@ -335,7 +461,7 @@ negative caption and an extra weighted margin term is added to the loss. The
 model config exposes `hard_negative_margin` and `hard_negative_weight` as normal
 experiment variables.
 
-## Repository shape
+## Architecture / 아키텍처
 
 ```text
 lavis/                  LAVIS models, datasets, processors, tasks, runners
@@ -347,7 +473,7 @@ workbench/              Oosu experiment orchestration and provenance layer
 experiments/            Small reusable manifests for this workbench
 ```
 
-## Origin and licensing
+## Origin and licensing / 출처 및 라이선스
 
 This repository was created from a clean source snapshot rather than a fork and
 contains no upstream Git history. The underlying LAVIS code remains under its
