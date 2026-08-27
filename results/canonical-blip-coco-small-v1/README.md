@@ -53,3 +53,28 @@ The OOD zip SHA-256 is
 `708c8016341248afe864581d5513661e0c5e7a09af0e6e60e6bbee6226bb79d6`.
 For all four variants, clean representations from the reloaded checkpoints
 match the canonical snapshots exactly (maximum absolute difference 0.0).
+
+## Research conclusion and next study
+
+This first canonical run is best interpreted as a trade-off study, not as a
+single-model winner. Base preserves the strongest clean and absolute OOD R@1.
+LoRA improves relative robustness and calibration, while r=8 hard-negative
+training recovers most of the ordinary r=8 clean-performance loss at the same
+trainable-parameter budget. The very high CKA values (`>= 0.99985`) show that
+these short PEFT runs make only small global changes to the measured fused
+representation space.
+
+Several metrics are already saturated in this small study: every variant has
+R@5/R@10 = `1.0` and frozen linear-probe accuracy = `1.0`. The next canonical
+study should therefore make the retrieval problem harder rather than merely
+increase epochs. Priority changes are:
+
+1. enlarge the held-out retrieval candidate pool;
+2. increase the density/diversity of confusable mined negatives;
+3. emphasize occlusion, which is the worst severity-3 OOD condition for every
+   measured variant; and
+4. repeat the main Base / r=8 / r=16 / r=8+HN comparison across multiple seeds
+   before making statistical claims about calibration or robustness gains.
+
+Until that harder multi-seed study exists, `base` remains the reference for
+absolute retrieval quality rather than being replaced by a LoRA checkpoint.
