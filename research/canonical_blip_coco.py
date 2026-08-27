@@ -219,27 +219,27 @@ def core_embeddings(
 
 
 def corrupt_image(image: Image.Image, row: dict[str, Any], name: str, severity: int, seed: int) -> Image.Image:
-    if severity not in {1, 2, 3}:
-        raise ValueError("OOD severity must be 1, 2, or 3.")
+    if severity not in {1, 2, 3, 4, 5}:
+        raise ValueError("OOD severity must be 1, 2, 3, 4, or 5.")
     if name == "gaussian_blur":
-        return image.filter(ImageFilter.GaussianBlur(radius={1: 1.0, 2: 2.0, 3: 4.0}[severity]))
+        return image.filter(ImageFilter.GaussianBlur(radius={1: 1.0, 2: 2.0, 3: 4.0, 4: 6.0, 5: 8.0}[severity]))
     if name == "gaussian_noise":
         digest = hashlib.sha256(f"{seed}:{row['sample_id']}:{severity}".encode()).digest()
         rng = np.random.default_rng(int.from_bytes(digest[:8], "big"))
         values = np.asarray(image, dtype=np.float32)
-        noise = rng.normal(0.0, {1: 8.0, 2: 16.0, 3: 32.0}[severity], size=values.shape)
+        noise = rng.normal(0.0, {1: 8.0, 2: 16.0, 3: 32.0, 4: 48.0, 5: 64.0}[severity], size=values.shape)
         return Image.fromarray(np.clip(values + noise, 0, 255).astype(np.uint8), mode="RGB")
     if name == "jpeg_compression":
         buffer = io.BytesIO()
-        image.save(buffer, format="JPEG", quality={1: 70, 2: 40, 3: 20}[severity])
+        image.save(buffer, format="JPEG", quality={1: 70, 2: 40, 3: 20, 4: 10, 5: 5}[severity])
         buffer.seek(0)
         with Image.open(buffer) as compressed:
             return compressed.convert("RGB")
     if name == "low_light":
-        return ImageEnhance.Brightness(image).enhance({1: 0.70, 2: 0.45, 3: 0.25}[severity])
+        return ImageEnhance.Brightness(image).enhance({1: 0.70, 2: 0.45, 3: 0.25, 4: 0.15, 5: 0.08}[severity])
     if name == "occlusion":
         result = image.copy()
-        fraction = {1: 0.10, 2: 0.20, 3: 0.35}[severity]
+        fraction = {1: 0.10, 2: 0.20, 3: 0.35, 4: 0.50, 5: 0.65}[severity]
         width = max(1, int(result.width * fraction**0.5))
         height = max(1, int(result.height * fraction**0.5))
         left = (result.width - width) // 2
