@@ -14,6 +14,33 @@ counts and zero train/probe overlap. Commit `1eb76fd` only parallelizes image
 cache downloads to avoid paid A100 idle time. No model, seed, training budget,
 or evaluation condition was changed.
 
+## Execution provenance
+
+The run was operated in Google Colab with an `NVIDIA A100-SXM4-40GB`. The
+interactive browser session was used to observe runtime allocation, the first
+allocation failure, cache progress, and the seed-by-seed execution. Those
+browser screenshots were not exported as durable files before the A100 runtime
+was deleted, so the canonical record intentionally relies on reproducible
+machine artifacts rather than reconstructed screenshots.
+
+The durable execution trail is:
+
+1. `b244cbe` — corrected balanced class allocation after the real
+   `dog: 81 available, 96 required` failure while keeping requested sample
+   counts and zero train/probe overlap.
+2. `1eb76fd` — parallelized COCO image-cache downloads only, avoiding paid A100
+   idle time without touching model or evaluation settings.
+3. `b4e0b6c` — added seed-completeness verification and direct paired
+   `r8+HN − r8` analysis.
+4. Seeds `42`, `1337`, and `2026` completed with all four variants.
+5. `f86ab7f` — published the measured canonical v2 results.
+6. `a9281b3` — linked this source experiment to its downstream evaluation
+   record in `multimodal-eval-workbench`.
+
+The first canonical study's committed A100 and result screenshots remain under
+`../canonical-blip-coco-small-v1/screenshots/` and are surfaced in the root
+README as visual evidence of the same end-to-end workflow.
+
 ## Three-seed results
 
 Values are mean ± sample standard deviation; the JSON summary also records

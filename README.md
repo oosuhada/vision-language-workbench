@@ -68,6 +68,75 @@ Git, so model outputs and large generated files do not pollute repository histor
 
 ## Measured results
 
+### End-to-end experiment record
+
+This repository now contains two real-data canonical studies, not only local
+or synthetic validation. The first study established the full workflow on a
+Google Colab A100; the harder v2 study then repeated the experiment over three
+seeds with a larger held-out retrieval pool and stronger occlusion stress.
+
+The research loop is:
+
+```text
+LAVIS / pretrained BLIP
+        ↓
+deterministic COCO allocation
+        ↓
+Base / LoRA r8 / LoRA r16 / LoRA r8 + hard negative
+        ↓
+representation snapshots + retrieval metrics
+        ↓
+OOD corruption evaluation
+        ↓
+multimodal-eval-workbench
+        ↓
+calibration + paired statistics + Pareto / replication analysis
+```
+
+The following screenshots are preserved from the first canonical A100 study
+and are committed as experiment evidence rather than decorative assets.
+
+**A100 runtime selected**
+
+![Google Colab A100 runtime selected](results/canonical-blip-coco-small-v1/screenshots/01-a100-runtime-selected.png)
+
+**Measured Base / LoRA comparison**
+
+![Measured BLIP comparison table](results/canonical-blip-coco-small-v1/screenshots/04-measured-comparison-table.png)
+
+**Mined hard-negative result**
+
+![Hard-negative experiment result](results/canonical-blip-coco-small-v1/screenshots/06-hard-negative-summary.png)
+
+**Exact-checkpoint OOD result**
+
+![Exact checkpoint OOD summary](results/canonical-blip-coco-small-v1/screenshots/07-exact-ood-summary.png)
+
+The harder v2 run was also executed interactively in Colab on an
+`NVIDIA A100-SXM4-40GB`. Browser automation captured intermediate screens
+during execution, but those browser captures were not persisted as repository
+files before the runtime was deleted, so this README does not fabricate or
+recreate them after the fact. The v2 execution is instead preserved through
+resolved configs, seed-level manifests, measurements, artifact SHA-256, and
+the Git commits created while resolving real run-time issues.
+
+#### Harder v2 execution timeline
+
+| Stage | Evidence |
+|---|---|
+| A100 allocated | `NVIDIA A100-SXM4-40GB` recorded in the measured run manifests |
+| Initial harder allocation failed | `dog: 81 available, 96 required` exposed an overly strict subset-selection assumption |
+| Balanced allocation fixed | `b244cbe` assigns scarce classes first while preserving globally disjoint image IDs and the requested 128/256 split |
+| Paid-GPU network idle reduced | `1eb76fd` parallelizes only image-cache downloads; experiment conditions remain unchanged |
+| Seed completeness tooling | `b4e0b6c` verifies all three seeds and computes paired `r8+HN − r8` statistics |
+| Seeds completed | `42`, `1337`, `2026`; 12 variant metrics and three `comparison.json` files |
+| Canonical v2 published | `f86ab7f`; result ZIP SHA-256 `5fc52a37700b83c08c7ce53bd1f361f1699a8263a78b7c902f6465ab60905867` |
+| Downstream evaluation linked | `a9281b3` records the source-to-evaluation lineage |
+
+This sequence is part of the research result: bugs and performance fixes were
+resolved without changing the declared seeds, model revision, train/probe
+counts, optimizer budget, or evaluation conditions.
+
 ### Harder multi-seed v2
 
 The larger canonical follow-up uses 128 training pairs, 256 held-out probe
