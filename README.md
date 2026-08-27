@@ -53,16 +53,15 @@ in one reproducible lineage.
 downstream evaluation을 하나의 reproducible lineage로 연결해 이러한 trade-off를
 명확하게 드러냅니다.
 
-## Research walkthrough / 프로젝트 화면
+## Research workflow / 연구 워크플로
 
-This project is a CLI/research workbench rather than a web application, so the
-primary user-facing surfaces are reproducible commands and generated reports.
-Colab screenshots are kept separately as GPU-execution evidence instead of
-being presented as the product UI.
+This project is organized around a reproducible research workflow rather than a
+graphical product surface. Experiments move from planning to representation
+analysis, hard-negative research, measured reports, and downstream evaluation.
 
-이 프로젝트는 웹앱이 아니라 CLI/research workbench이므로 실제 프로젝트
-화면은 **명령 실행과 생성된 report/result artifact**입니다. Colab 화면은
-제품 UI가 아니라 GPU 실험 수행 증거로 별도 섹션에 배치합니다.
+이 프로젝트는 그래픽 제품 화면이 아니라 **재현 가능한 연구 워크플로**를
+중심으로 구성됩니다. 실험 계획에서 시작해 표현 공간 분석, hard-negative
+연구, 실측 리포트, downstream evaluation으로 이어집니다.
 
 ### 1. Experiment planning / 실험 계획
 
@@ -233,6 +232,10 @@ preserved under the canonical result directory, covering runtime allocation,
 active execution, three-seed validation/artifact packaging, and final runtime
 deletion.
 
+Harder v2 역시 `NVIDIA A100-SXM4-40GB` Colab에서 실행했으며, runtime 선택,
+실험 실행, 3-seed 검증 및 artifact packaging, 최종 runtime 삭제까지 네 장의
+브라우저 캡처를 canonical result directory에 보존했습니다.
+
 **Harder v2: A100 runtime selected**
 
 ![Harder v2 A100 runtime selection](results/canonical-blip-coco-harder-multiseed-v2/screenshots/01-a100-runtime-selection.png)
@@ -266,6 +269,10 @@ This sequence is part of the research result: bugs and performance fixes were
 resolved without changing the declared seeds, model revision, train/probe
 counts, optimizer budget, or evaluation conditions.
 
+이 실행 이력 자체도 연구 결과의 일부입니다. 실제 실행 중 발견된 버그와 성능
+문제를 수정했지만 선언된 seed, model revision, train/probe 수, optimizer budget,
+evaluation condition은 변경하지 않았습니다.
+
 ### Harder multi-seed v2 / 더 어려운 3-seed 재현 실험
 
 The larger canonical follow-up uses 128 training pairs, 256 held-out probe
@@ -285,6 +292,9 @@ inconclusive at three seeds. CKA remains 0.99837–0.99954.
 Full seed-level metrics, Student-t intervals, paired hard-negative deltas, and
 occlusion severity 4–5 results are in
 [`results/canonical-blip-coco-harder-multiseed-v2`](results/canonical-blip-coco-harder-multiseed-v2).
+
+Seed별 metric, Student-t interval, paired hard-negative delta, occlusion
+severity 4–5 상세 결과는 위 canonical v2 result directory에 저장되어 있습니다.
 
 ### First canonical study / 첫 canonical 실험
 
@@ -317,6 +327,12 @@ the canonical outcomes and were not retuned. Fused-space CKA versus Base was
 slightly reduces retrieval R@1 while barely moving the held-out representation
 space, although its image-to-text NLL improves from 1.16840 to 1.10865/1.06734.
 
+두 LoRA rank는 동일한 data와 budget(2 epoch, 16 optimizer step, batch size 8,
+learning rate `1e-4`, symmetric contrastive loss)을 사용했습니다. Base 대비
+R@1은 r8에서 `-0.01875`, r16에서 `-0.01250`이었고 결과에 맞춘 재튜닝은 하지
+않았습니다. CKA는 거의 1을 유지해 작은 Q/V update가 held-out representation을
+크게 이동시키지 않았음을 보여줍니다.
+
 For the hard-negative variant, the pretrained train embeddings mine one
 nearest wrong caption per image (`different-id`; mean cosine 0.35994), and the
 existing margin loss is added with margin 0.2 and weight 1.0 under the same r=8
@@ -324,8 +340,16 @@ budget. It recovers 0.01250 R@1 over ordinary r=8 but remains 0.00625 below
 Base. Its 16-step mean hard-negative loss was 0.09550. No outcome-driven
 hyperparameter retry was performed.
 
+Hard-negative variant는 pretrained train embedding에서 image당 가장 가까운 오답
+caption 하나를 mining하고 동일한 r8 budget에서 margin loss를 추가했습니다.
+첫 canonical run에서는 ordinary r8 대비 R@1을 `+0.01250` 회복했지만 Base보다
+`0.00625` 낮았으며, 결과를 보고 hyperparameter를 다시 조정하지 않았습니다.
+
 The exact saved canonical adapters were then evaluated on five lazy image
 corruptions at severity 1–3 (15 matched conditions, 80 samples each):
+
+저장된 canonical adapter는 다섯 종류의 lazy image corruption을 severity 1–3으로
+적용한 15개 matched condition에서 추가 평가했습니다.
 
 | Variant | Clean R@1 | Mean OOD R@1 | Mean retention | Worst retention | Worst condition |
 |---|---:|---:|---:|---:|---|
@@ -340,11 +364,23 @@ harder than blur, noise, JPEG, or low light for every variant. Clean
 representations re-extracted from the saved adapters match the canonical NPZ
 files exactly (maximum absolute difference 0.0).
 
+LoRA는 낮은 clean score에서 시작하기 때문에 relative retention은 높아지지만
+absolute mean OOD R@1은 Base가 가장 높았습니다. 모든 variant에서 occlusion이
+가장 어려운 shift였고, 저장된 adapter를 다시 로드해 추출한 representation은
+canonical NPZ와 최대 절대 차이 `0.0`으로 일치했습니다.
+
 This is an actual A100/bfloat16 run, not a synthetic smoke test. Its pinned
 environment, sample IDs, confidence records, and representation NPZ files are
 stored under [`results/canonical-blip-coco-small-v1`](results/canonical-blip-coco-small-v1).
 
+이 결과는 synthetic smoke test가 아니라 실제 A100/bfloat16 실험입니다. Pinned
+environment, sample ID, confidence record, representation NPZ는 첫 canonical
+result directory에 보존되어 있습니다.
+
 Search bundled LAVIS configs without importing any heavyweight model package:
+
+Heavyweight model package를 import하지 않고 bundled LAVIS config를 검색할 수
+있습니다.
 
 ```bash
 vl-workbench catalog blip2 --kind model
@@ -357,6 +393,10 @@ downloads or GPU initialization.
 The underlying execution still goes through the original LAVIS entrypoints:
 `train.py` and `evaluate.py`.
 
+Catalog는 filesystem 기반이라 checkpoint download나 GPU initialization을
+발생시키지 않습니다. 실제 training/evaluation 실행은 기존 LAVIS entrypoint인
+`train.py`, `evaluate.py`를 그대로 사용합니다.
+
 ## Representation research / 표현 공간 연구
 
 Intermediate LAVIS representations can be captured as reusable NumPy snapshots
@@ -364,7 +404,14 @@ and analyzed without repeatedly loading model weights. The extractor calls the
 bundled model's existing `extract_features()` implementation rather than
 recreating an encoder.
 
+LAVIS 중간 representation은 재사용 가능한 NumPy snapshot으로 저장할 수
+있으며, 매번 모델 weight를 다시 로드하지 않고 분석할 수 있습니다. Extractor는
+encoder를 새로 구현하지 않고 포함된 모델의 기존 `extract_features()`를 그대로
+사용합니다.
+
 Probe data is JSONL with stable ids and optional labels:
+
+Probe 데이터는 stable id와 선택적 label을 갖는 JSONL 형식입니다.
 
 ```json
 {"id":"dog-001","image":"images/dog.jpg","text":"a black dog running","label":"dog"}
@@ -387,7 +434,14 @@ set to be captured before and after fine-tuning. `probe` reports frozen ridge
 linear-probe accuracy, within-class cosine cohesion, between-class centroid
 similarity, separation margin, and embedding anisotropy.
 
+`extract-features`는 `--checkpoint`도 지원하므로 동일 probe set을 fine-tuning
+전후에 추출할 수 있습니다. `probe`는 frozen ridge linear-probe accuracy,
+class 내부 cosine cohesion, class centroid 간 similarity, separation margin,
+embedding anisotropy를 계산합니다.
+
 Compare a base snapshot against a fine-tuned checkpoint snapshot:
+
+Base snapshot과 fine-tuned checkpoint snapshot은 다음처럼 직접 비교합니다.
 
 ```bash
 vl-workbench drift \
@@ -402,10 +456,18 @@ and the samples whose representations moved the most. CKA remains valid even
 when the compared feature dimensions differ; direct cosine metrics are emitted
 when dimensions match.
 
+Drift 분석은 stable id로 sample을 정렬한 뒤 linear CKA, sample별 cosine drift,
+anisotropy 변화, class separation 변화, class centroid drift, representation이
+가장 크게 이동한 sample을 보고합니다. CKA는 비교 feature dimension이 달라도
+사용할 수 있고, dimension이 같으면 direct cosine metric도 함께 계산합니다.
+
 ## Hard-negative mining / Hard-negative 마이닝
 
 Use the same saved representation space to find examples the current model is
 most likely to confuse:
+
+동일하게 저장된 representation space에서 현재 모델이 가장 혼동하기 쉬운
+example을 찾을 수 있습니다.
 
 ```bash
 vl-workbench hard-negatives artifacts/blip-base-image.npz \
@@ -416,6 +478,10 @@ vl-workbench hard-negatives artifacts/blip-base-image.npz \
 
 For cross-modal contrastive mining, pass a second snapshot (for example image
 anchors against text candidates) and use stable ids to exclude the true pair:
+
+Cross-modal contrastive mining에서는 두 번째 snapshot을 candidate로 전달하고
+(예: image anchor 대 text candidate), stable id를 이용해 실제 정답 pair를
+제외합니다.
 
 ```bash
 vl-workbench hard-negatives artifacts/images.npz \
@@ -428,19 +494,37 @@ Mining is cosine-nearest-neighbor based and chunked to avoid allocating the
 entire similarity matrix. The resulting JSONL can be consumed by later
 fine-tuning data builders without changing the bundled LAVIS encoders.
 
+Mining은 cosine nearest neighbor 기반이며 전체 similarity matrix를 한 번에
+메모리에 만들지 않도록 chunk 단위로 처리합니다. 생성된 JSONL은 기존 LAVIS
+encoder를 수정하지 않고 이후 fine-tuning data builder에서 사용할 수 있습니다.
+
 ## LoRA placement research / LoRA 배치 연구
 
 The bundled xInstructBLIP code already uses PEFT LoRA for its LLM path. The
 workbench adds a generic research policy for any LAVIS `nn.Linear` tree so LoRA
 rank and placement are explicit experiment variables instead of fixed choices.
 
+포함된 xInstructBLIP 코드는 이미 LLM 경로에 PEFT LoRA를 사용합니다. 이
+워크벤치는 LAVIS의 임의 `nn.Linear` tree에 적용할 수 있는 generic research
+policy를 추가해 LoRA rank와 placement를 고정값이 아니라 명시적인 실험 변수로
+다룹니다.
+
 Policies under `research/lora/` can target module suffixes or regular
 expressions. `compare_lora_policies()` reports matched layers and exact adapter
 parameter cost before training. `inject_lora()` installs zero-initialized
 low-rank residuals while preserving the underlying LAVIS architecture.
 
+`research/lora/`의 policy는 module suffix 또는 regular expression으로 target을
+지정할 수 있습니다. `compare_lora_policies()`는 학습 전에 matched layer와 정확한
+adapter parameter cost를 계산하고, `inject_lora()`는 기존 LAVIS architecture를
+유지한 채 zero-initialized low-rank residual을 설치합니다.
+
 This supports controlled studies such as Q/V rank 8 vs 16, projection-only
 LoRA, or vision/Q-Former/LLM placement at a known trainable-parameter budget.
+
+이를 통해 Q/V rank 8 대 16, projection-only LoRA, vision/Q-Former/LLM 위치별
+LoRA처럼 trainable parameter budget이 명확한 controlled study를 수행할 수
+있습니다.
 
 ## Hard negatives in the training loop / 학습 루프 연결
 
@@ -449,10 +533,20 @@ LAVIS retrieval annotations with `materialize_hard_negative_annotations()`.
 The registered `hard_negative_retrieval` dataset returns the normal positive
 caption plus a mined `hard_negative_text` and its cosine hardness score.
 
+Mined neighbor는 `materialize_hard_negative_annotations()`를 통해 원래 probe
+JSONL에 실제 LAVIS retrieval annotation으로 다시 결합할 수 있습니다. 등록된
+`hard_negative_retrieval` dataset은 positive caption과 함께 mined
+`hard_negative_text`, cosine hardness score를 반환합니다.
+
 `hard_negative_margin_loss()` then adds an explicit cosine ranking objective on
 top of features produced by the existing LAVIS encoders. It supports one or
 multiple negatives per image and optional hardness weighting, allowing studies
 of random vs mined negatives without rewriting BLIP/ALBEF encoders.
+
+`hard_negative_margin_loss()`는 기존 LAVIS encoder가 만든 feature 위에 명시적인
+cosine ranking objective를 추가합니다. Image당 하나 또는 여러 negative와
+선택적 hardness weighting을 지원하므로 BLIP/ALBEF encoder를 다시 구현하지 않고
+random negative와 mined negative를 비교할 수 있습니다.
 
 For end-to-end training, `blip_retrieval_hard_negative` subclasses the original
 `BlipRetrieval`: the full upstream ITC/ITM forward pass is reused, then the
@@ -461,7 +555,19 @@ negative caption and an extra weighted margin term is added to the loss. The
 model config exposes `hard_negative_margin` and `hard_negative_weight` as normal
 experiment variables.
 
+End-to-end training에서는 `blip_retrieval_hard_negative`가 기존
+`BlipRetrieval`을 상속합니다. Upstream ITC/ITM forward를 그대로 재사용한 뒤 이미
+계산된 positive image/text embedding과 mined negative caption을 연결하고 weighted
+margin term만 loss에 추가합니다. `hard_negative_margin`과
+`hard_negative_weight`는 일반 experiment variable로 config에서 조정합니다.
+
 ## Architecture / 아키텍처
+
+The repository keeps the original LAVIS execution path intact and places the
+research orchestration, manifests, and analysis tooling in separate layers.
+
+이 저장소는 기존 LAVIS 실행 경로를 그대로 유지하고, 연구 orchestration,
+manifest, 분석 도구를 별도 계층으로 분리합니다.
 
 ```text
 lavis/                  LAVIS models, datasets, processors, tasks, runners
@@ -472,9 +578,3 @@ evaluate.py             Original LAVIS evaluation entrypoint
 workbench/              Oosu experiment orchestration and provenance layer
 experiments/            Small reusable manifests for this workbench
 ```
-
-## Origin and licensing / 출처 및 라이선스
-
-This repository was created from a clean source snapshot rather than a fork and
-contains no upstream Git history. The underlying LAVIS code remains under its
-BSD 3-Clause license. See `LICENSE.txt` and `THIRD_PARTY_NOTICE.md`.
