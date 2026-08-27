@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from contextlib import nullcontext
 import csv
 from datetime import datetime, timezone
@@ -150,9 +151,6 @@ def prepare_coco_subset(config: dict[str, Any], cache: Path, output: Path) -> li
             split = "train" if offset < int(config["train_per_class"]) else "probe"
             caption = sorted(image_captions[image_id])[0][1]
             image_path = cache / "images" / f"{image_id:012d}.jpg"
-            download(COCO_IMAGE_URL.format(image_id=image_id), image_path)
-            with Image.open(image_path) as image:
-                image.verify()
             records.append(
                 {
                     "sample_id": f"coco-val2017-{image_id:012d}",
@@ -165,6 +163,18 @@ def prepare_coco_subset(config: dict[str, Any], cache: Path, output: Path) -> li
                     "split": split,
                 }
             )
+
+    def cache_and_verify(record: dict[str, Any]) -> None:
+        image_path = Path(record["image_path"])
+        download(record["image_url"], image_path)
+        with Image.open(image_path) as image:
+            image.verify()
+
+    # Image downloads are network-bound; parallelize only this cache-fill step
+    # so paid GPU time is not spent waiting on hundreds of serial HTTP requests.
+    with ThreadPoolExecutor(max_workers=16) as executor:
+        list(executor.map(cache_and_verify, records))
+
     manifest_path = output / "dataset_manifest.jsonl"
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     with manifest_path.open("w", encoding="utf-8") as handle:
