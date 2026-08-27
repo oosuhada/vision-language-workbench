@@ -24,6 +24,13 @@ METRICS = (
     "ood_worst_retention_r_at_1",
 )
 
+PAIRWISE_COMPARISONS = (
+    ("lora-r8", "base"),
+    ("lora-r16", "base"),
+    ("lora-r8-hard-negative", "base"),
+    ("lora-r8-hard-negative", "lora-r8"),
+)
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
@@ -88,6 +95,7 @@ def main() -> None:
 
     by_variant: dict[str, dict[str, list[float]]] = {}
     paired: dict[str, dict[str, list[float]]] = {}
+    pairwise: dict[str, dict[str, list[float]]] = {}
     for seed, rows in runs:
         row_map = {row["variant"]: row for row in rows}
         base = row_map["base"]
@@ -101,7 +109,23 @@ def main() -> None:
                 if variant != "base" and metric in base:
                     delta_map.setdefault(metric, []).append(float(row[metric]) - float(base[metric]))
 
-    summary: dict[str, Any] = {"seed_count": len(runs), "seeds": [seed for seed, _ in runs], "variants": {}}
+        for left, right in PAIRWISE_COMPARISONS:
+            if left not in row_map or right not in row_map:
+                continue
+            comparison_key = f"{left}_minus_{right}"
+            comparison_metrics = pairwise.setdefault(comparison_key, {})
+            for metric in METRICS:
+                if metric in row_map[left] and metric in row_map[right]:
+                    comparison_metrics.setdefault(metric, []).append(
+                        float(row_map[left][metric]) - float(row_map[right][metric])
+                    )
+
+    summary: dict[str, Any] = {
+        "seed_count": len(runs),
+        "seeds": [seed for seed, _ in runs],
+        "variants": {},
+        "pairwise": {},
+    }
     for variant, metrics in by_variant.items():
         entry: dict[str, Any] = {"metrics": {}, "paired_delta_vs_base": {}}
         for metric, values in metrics.items():
@@ -120,6 +144,26 @@ def main() -> None:
             }
         summary["variants"][variant] = entry
 
+    for comparison, metrics in pairwise.items():
+        summary["pairwise"][comparison] = {}
+        for metric, values in metrics.items():
+            half_width = ci95(values)
+            delta_mean = mean(values)
+            low = delta_mean - half_width
+            high = delta_mean + half_width
+            summary["pairwise"][comparison][metric] = {
+                "mean": delta_mean,
+                "std": stdev(values) if len(values) > 1 else 0.0,
+                "ci95_half_width": half_width,
+                "ci95_low": low,
+                "ci95_high": high,
+                "values": values,
+                "directionally_consistent": all(value > 0 for value in values)
+                or all(value < 0 for value in values)
+                or all(value == 0 for value in values),
+                "ci95_excludes_zero": low > 0 or high < 0,
+            }
+
     output = args.output or args.root / "multiseed-summary.json"
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -133,7 +177,49 @@ def main() -> None:
                 delta = entry["paired_delta_vs_base"].get(metric, {}).get("mean")
                 writer.writerow([variant, metric, stats["mean"], stats["std"], stats["ci95_half_width"], delta])
 
-    print(json.dumps({"seeds": summary["seeds"], "output": str(output), "csv": str(csv_path)}, indent=2))
+    pairwise_csv_path = output.with_name(output.stem + "-pairwise.csv")
+    with pairwise_csv_path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(
+            [
+                "comparison",
+                "metric",
+                "mean_delta",
+                "std",
+                "ci95_half_width",
+                "ci95_low",
+                "ci95_high",
+                "directionally_consistent",
+                "ci95_excludes_zero",
+            ]
+        )
+        for comparison, metrics in summary["pairwise"].items():
+            for metric, stats in metrics.items():
+                writer.writerow(
+                    [
+                        comparison,
+                        metric,
+                        stats["mean"],
+                        stats["std"],
+                        stats["ci95_half_width"],
+                        stats["ci95_low"],
+                        stats["ci95_high"],
+                        stats["directionally_consistent"],
+                        stats["ci95_excludes_zero"],
+                    ]
+                )
+
+    print(
+        json.dumps(
+            {
+                "seeds": summary["seeds"],
+                "output": str(output),
+                "csv": str(csv_path),
+                "pairwise_csv": str(pairwise_csv_path),
+            },
+            indent=2,
+        )
+    )
 
 
 if __name__ == "__main__":
