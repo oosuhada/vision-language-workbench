@@ -18,10 +18,17 @@ or evaluation condition was changed.
 
 The run was operated in Google Colab with an `NVIDIA A100-SXM4-40GB`. The
 interactive browser session was used to observe runtime allocation, the first
-allocation failure, cache progress, and the seed-by-seed execution. Those
-browser screenshots were not exported as durable files before the A100 runtime
-was deleted, so the canonical record intentionally relies on reproducible
-machine artifacts rather than reconstructed screenshots.
+allocation failure, cache progress, and the seed-by-seed execution. Four
+screenshots from that session are now committed alongside the machine-readable
+artifacts so the human execution record and the reproducible result record stay
+together.
+
+| Stage | Screenshot |
+|---|---|
+| A100 runtime selected | ![A100 runtime selected](screenshots/01-a100-runtime-selection.png) |
+| Multi-seed experiment running | ![A100 experiment running](screenshots/02-a100-experiment-running.png) |
+| Seeds 42/1337/2026 validated and ZIP prepared | ![Three seeds validated](screenshots/03-three-seeds-validated-zip.png) |
+| Runtime disconnected and deleted after artifact capture | ![Runtime disconnected and deleted](screenshots/04-runtime-disconnected-deleted.png) |
 
 The durable execution trail is:
 
@@ -37,9 +44,9 @@ The durable execution trail is:
 6. `a9281b3` — linked this source experiment to its downstream evaluation
    record in `multimodal-eval-workbench`.
 
-The first canonical study's committed A100 and result screenshots remain under
-`../canonical-blip-coco-small-v1/screenshots/` and are surfaced in the root
-README as visual evidence of the same end-to-end workflow.
+The first canonical study's full eight-image execution record remains under
+`../canonical-blip-coco-small-v1/screenshots/`; the root README surfaces only
+the representative images needed to tell the end-to-end story.
 
 ## Three-seed results
 

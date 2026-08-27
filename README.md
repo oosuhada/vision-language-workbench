@@ -113,12 +113,26 @@ and are committed as experiment evidence rather than decorative assets.
 ![Exact checkpoint OOD summary](results/canonical-blip-coco-small-v1/screenshots/07-exact-ood-summary.png)
 
 The harder v2 run was also executed interactively in Colab on an
-`NVIDIA A100-SXM4-40GB`. Browser automation captured intermediate screens
-during execution, but those browser captures were not persisted as repository
-files before the runtime was deleted, so this README does not fabricate or
-recreate them after the fact. The v2 execution is instead preserved through
-resolved configs, seed-level manifests, measurements, artifact SHA-256, and
-the Git commits created while resolving real run-time issues.
+`NVIDIA A100-SXM4-40GB`. Four browser-captured checkpoints of that run are
+preserved under the canonical result directory, covering runtime allocation,
+active execution, three-seed validation/artifact packaging, and final runtime
+deletion.
+
+**Harder v2: A100 runtime selected**
+
+![Harder v2 A100 runtime selection](results/canonical-blip-coco-harder-multiseed-v2/screenshots/01-a100-runtime-selection.png)
+
+**Harder v2: experiment running**
+
+![Harder v2 A100 experiment running](results/canonical-blip-coco-harder-multiseed-v2/screenshots/02-a100-experiment-running.png)
+
+**Harder v2: all three seeds validated and result ZIP prepared**
+
+![Harder v2 three seeds validated](results/canonical-blip-coco-harder-multiseed-v2/screenshots/03-three-seeds-validated-zip.png)
+
+**Harder v2: paid runtime disconnected and deleted**
+
+![Harder v2 runtime disconnected and deleted](results/canonical-blip-coco-harder-multiseed-v2/screenshots/04-runtime-disconnected-deleted.png)
 
 #### Harder v2 execution timeline
 
