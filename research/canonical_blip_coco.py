@@ -124,18 +124,29 @@ def prepare_coco_subset(config: dict[str, Any], cache: Path, output: Path) -> li
     candidates: dict[str, list[int]] = {name: [] for name in selected_names}
     for image_id, categories in image_categories.items():
         present = categories & selected_ids
-        if len(present) == 1 and image_id in image_captions:
-            candidates[id_to_name[next(iter(present))]].append(image_id)
+        if present and image_id in image_captions:
+            for category_id in present:
+                candidates[id_to_name[category_id]].append(image_id)
 
     rng = random.Random(int(config["seed"]))
     records: list[dict[str, Any]] = []
     needed = int(config["train_per_class"]) + int(config["probe_per_class"])
-    for class_index, name in enumerate(selected_names):
+    selected_by_name: dict[str, list[int]] = {}
+    used_image_ids: set[int] = set()
+    # Some valid COCO images contain more than one study category. Allocate the
+    # scarcest class first and prevent global reuse so the requested balanced
+    # split remains feasible without train/probe or cross-class duplication.
+    for name in sorted(selected_names, key=lambda value: (len(candidates[value]), value)):
         ids = sorted(candidates[name])
         rng.shuffle(ids)
-        if len(ids) < needed:
-            raise RuntimeError(f"COCO class {name!r} has {len(ids)} eligible images, need {needed}.")
-        for offset, image_id in enumerate(ids[:needed]):
+        available = [image_id for image_id in ids if image_id not in used_image_ids]
+        if len(available) < needed:
+            raise RuntimeError(f"COCO class {name!r} has {len(available)} unassigned images, need {needed}.")
+        selected_by_name[name] = available[:needed]
+        used_image_ids.update(selected_by_name[name])
+
+    for class_index, name in enumerate(selected_names):
+        for offset, image_id in enumerate(selected_by_name[name]):
             split = "train" if offset < int(config["train_per_class"]) else "probe"
             caption = sorted(image_captions[image_id])[0][1]
             image_path = cache / "images" / f"{image_id:012d}.jpg"
