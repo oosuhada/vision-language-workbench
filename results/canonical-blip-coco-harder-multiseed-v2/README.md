@@ -56,3 +56,13 @@ LoRA variant while r16 produces the largest cosine drift.
 Large adapters, representation NPZ files, model weights, and the COCO cache are
 intentionally excluded from Git. The downloaded canonical ZIP SHA-256 is
 `5fc52a37700b83c08c7ce53bd1f361f1699a8263a78b7c902f6465ab60905867`.
+
+## Research lineage
+
+`research-lineage.json` makes the cross-repository research chain explicit.
+This directory is the measurement source; its downstream calibration, OOD,
+Pareto, and replication analysis lives in
+`oosuhada/multimodal-eval-workbench` at
+`results/canonical-blip-coco-harder-multiseed-v2` (evaluation result commit
+`1d4f784`). The manifest also records which v1 observations replicated,
+remained inconclusive, or failed to reproduce in this harder three-seed study.

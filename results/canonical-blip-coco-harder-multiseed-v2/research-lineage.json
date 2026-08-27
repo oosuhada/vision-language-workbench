@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "study_id": "canonical-blip-coco-harder-multiseed-v2",
+  "role": "training-and-measurement-source",
+  "repository": "oosuhada/vision-language-workbench",
+  "source_commit": "f86ab7f",
+  "predecessor": {
+    "study_id": "canonical-blip-coco-small-v1",
+    "repository": "oosuhada/vision-language-workbench",
+    "result_path": "results/canonical-blip-coco-small-v1"
+  },
+  "downstream_evaluation": {
+    "repository": "oosuhada/multimodal-eval-workbench",
+    "commit": "1d4f784",
+    "result_path": "results/canonical-blip-coco-harder-multiseed-v2"
+  },
+  "artifact": {
+    "local_archive_name": "canonical-blip-coco-harder-multiseed-v2-results.zip",
+    "sha256": "5fc52a37700b83c08c7ce53bd1f361f1699a8263a78b7c902f6465ab60905867"
+  },
+  "replication_claims": [
+    {
+      "claim": "base_clean_retrieval_advantage",
+      "v1": "observed",
+      "v2": "reproduced_directionally_across_all_three_seeds",
+      "status": "replicated"
+    },
+    {
+      "claim": "lora_calibration_improvement",
+      "v1": "observed",
+      "v2": "reproduced_with_paired_ece_and_nll_improvement",
+      "status": "replicated"
+    },
+    {
+      "claim": "lora_relative_ood_retention_improvement",
+      "v1": "observed",
+      "v2": "r8_directionally_positive_but_ci_crosses_zero",
+      "status": "inconclusive"
+    },
+    {
+      "claim": "hard_negative_clean_recovery",
+      "v1": "observed",
+      "v2": "not_reproduced_r8_hn_tied_r8_on_all_three_seeds",
+      "status": "not_replicated"
+    },
+    {
+      "claim": "representations_remain_close_to_base",
+      "v1": "cka_above_0_99985",
+      "v2": "mean_cka_above_0_9983_for_all_lora_variants",
+      "status": "replicated"
+    }
+  ]
+}
