@@ -68,6 +68,22 @@ Git, so model outputs and large generated files do not pollute repository histor
 
 ## Measured results
 
+### Harder multi-seed v2
+
+The larger canonical follow-up uses 128 training pairs, 256 held-out probe
+pairs, seeds 42/1337/2026, and 17 OOD conditions including occlusion severity
+4–5. Base retains the highest clean R@1 (0.85612 mean); r8 and r16 are lower on
+all three seeds (0.84766 and 0.84701). LoRA r8 improves mean relative retention
+to 0.88431 versus Base's 0.87951, but the paired n=3 CI crosses zero. Mined hard
+negatives tie ordinary r8 on clean R@1 and add only +0.00084 mean OOD R@1, also
+inconclusive at three seeds. CKA remains 0.99837–0.99954.
+
+Full seed-level metrics, Student-t intervals, paired hard-negative deltas, and
+occlusion severity 4–5 results are in
+[`results/canonical-blip-coco-harder-multiseed-v2`](results/canonical-blip-coco-harder-multiseed-v2).
+
+### First canonical study
+
 The first canonical study uses the real
 [COCO 2017](https://cocodataset.org/#download) validation images and human
 captions with the pretrained

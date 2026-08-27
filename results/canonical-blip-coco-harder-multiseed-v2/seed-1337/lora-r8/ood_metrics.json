@@ -1,0 +1,190 @@
+{
+  "clean_mean_r_at_1": 0.86328125,
+  "condition_count": 17,
+  "conditions": [
+    {
+      "absolute_delta_r_at_1": 0.013671875,
+      "corruption": "gaussian_blur",
+      "mean_r_at_1": 0.876953125,
+      "mean_r_at_10": 0.998046875,
+      "mean_r_at_5": 0.9921875,
+      "retention_r_at_1": 1.0158371040723981,
+      "samples": 256,
+      "severity": 1
+    },
+    {
+      "absolute_delta_r_at_1": -0.033203125,
+      "corruption": "gaussian_blur",
+      "mean_r_at_1": 0.830078125,
+      "mean_r_at_10": 0.994140625,
+      "mean_r_at_5": 0.990234375,
+      "retention_r_at_1": 0.9615384615384616,
+      "samples": 256,
+      "severity": 2
+    },
+    {
+      "absolute_delta_r_at_1": -0.11328125,
+      "corruption": "gaussian_blur",
+      "mean_r_at_1": 0.75,
+      "mean_r_at_10": 0.9765625,
+      "mean_r_at_5": 0.94921875,
+      "retention_r_at_1": 0.8687782805429864,
+      "samples": 256,
+      "severity": 3
+    },
+    {
+      "absolute_delta_r_at_1": 0.005859375,
+      "corruption": "gaussian_noise",
+      "mean_r_at_1": 0.869140625,
+      "mean_r_at_10": 0.998046875,
+      "mean_r_at_5": 0.990234375,
+      "retention_r_at_1": 1.006787330316742,
+      "samples": 256,
+      "severity": 1
+    },
+    {
+      "absolute_delta_r_at_1": 0.009765625,
+      "corruption": "gaussian_noise",
+      "mean_r_at_1": 0.873046875,
+      "mean_r_at_10": 0.998046875,
+      "mean_r_at_5": 0.990234375,
+      "retention_r_at_1": 1.01131221719457,
+      "samples": 256,
+      "severity": 2
+    },
+    {
+      "absolute_delta_r_at_1": -0.033203125,
+      "corruption": "gaussian_noise",
+      "mean_r_at_1": 0.830078125,
+      "mean_r_at_10": 0.998046875,
+      "mean_r_at_5": 0.986328125,
+      "retention_r_at_1": 0.9615384615384616,
+      "samples": 256,
+      "severity": 3
+    },
+    {
+      "absolute_delta_r_at_1": 0.009765625,
+      "corruption": "jpeg_compression",
+      "mean_r_at_1": 0.873046875,
+      "mean_r_at_10": 0.99609375,
+      "mean_r_at_5": 0.990234375,
+      "retention_r_at_1": 1.01131221719457,
+      "samples": 256,
+      "severity": 1
+    },
+    {
+      "absolute_delta_r_at_1": -0.00390625,
+      "corruption": "jpeg_compression",
+      "mean_r_at_1": 0.859375,
+      "mean_r_at_10": 0.99609375,
+      "mean_r_at_5": 0.990234375,
+      "retention_r_at_1": 0.995475113122172,
+      "samples": 256,
+      "severity": 2
+    },
+    {
+      "absolute_delta_r_at_1": 0.001953125,
+      "corruption": "jpeg_compression",
+      "mean_r_at_1": 0.865234375,
+      "mean_r_at_10": 0.998046875,
+      "mean_r_at_5": 0.9921875,
+      "retention_r_at_1": 1.002262443438914,
+      "samples": 256,
+      "severity": 3
+    },
+    {
+      "absolute_delta_r_at_1": 0.005859375,
+      "corruption": "low_light",
+      "mean_r_at_1": 0.869140625,
+      "mean_r_at_10": 0.998046875,
+      "mean_r_at_5": 0.990234375,
+      "retention_r_at_1": 1.006787330316742,
+      "samples": 256,
+      "severity": 1
+    },
+    {
+      "absolute_delta_r_at_1": 0.0,
+      "corruption": "low_light",
+      "mean_r_at_1": 0.86328125,
+      "mean_r_at_10": 0.998046875,
+      "mean_r_at_5": 0.98828125,
+      "retention_r_at_1": 1.0,
+      "samples": 256,
+      "severity": 2
+    },
+    {
+      "absolute_delta_r_at_1": -0.009765625,
+      "corruption": "low_light",
+      "mean_r_at_1": 0.853515625,
+      "mean_r_at_10": 0.998046875,
+      "mean_r_at_5": 0.984375,
+      "retention_r_at_1": 0.9886877828054299,
+      "samples": 256,
+      "severity": 3
+    },
+    {
+      "absolute_delta_r_at_1": -0.1015625,
+      "corruption": "occlusion",
+      "mean_r_at_1": 0.76171875,
+      "mean_r_at_10": 0.982421875,
+      "mean_r_at_5": 0.94921875,
+      "retention_r_at_1": 0.8823529411764706,
+      "samples": 256,
+      "severity": 1
+    },
+    {
+      "absolute_delta_r_at_1": -0.181640625,
+      "corruption": "occlusion",
+      "mean_r_at_1": 0.681640625,
+      "mean_r_at_10": 0.951171875,
+      "mean_r_at_5": 0.91796875,
+      "retention_r_at_1": 0.7895927601809954,
+      "samples": 256,
+      "severity": 2
+    },
+    {
+      "absolute_delta_r_at_1": -0.28125,
+      "corruption": "occlusion",
+      "mean_r_at_1": 0.58203125,
+      "mean_r_at_10": 0.900390625,
+      "mean_r_at_5": 0.841796875,
+      "retention_r_at_1": 0.6742081447963801,
+      "samples": 256,
+      "severity": 3
+    },
+    {
+      "absolute_delta_r_at_1": -0.400390625,
+      "corruption": "occlusion",
+      "mean_r_at_1": 0.462890625,
+      "mean_r_at_10": 0.869140625,
+      "mean_r_at_5": 0.783203125,
+      "retention_r_at_1": 0.5361990950226244,
+      "samples": 256,
+      "severity": 4
+    },
+    {
+      "absolute_delta_r_at_1": -0.474609375,
+      "corruption": "occlusion",
+      "mean_r_at_1": 0.388671875,
+      "mean_r_at_10": 0.822265625,
+      "mean_r_at_5": 0.705078125,
+      "retention_r_at_1": 0.4502262443438914,
+      "samples": 256,
+      "severity": 5
+    }
+  ],
+  "mean_ood_r_at_1": 0.7699908088235294,
+  "mean_retention_r_at_1": 0.8919350545648124,
+  "variant": "lora-r8",
+  "worst_condition": {
+    "absolute_delta_r_at_1": -0.474609375,
+    "corruption": "occlusion",
+    "mean_r_at_1": 0.388671875,
+    "mean_r_at_10": 0.822265625,
+    "mean_r_at_5": 0.705078125,
+    "retention_r_at_1": 0.4502262443438914,
+    "samples": 256,
+    "severity": 5
+  },
+  "worst_retention_r_at_1": 0.4502262443438914
+}

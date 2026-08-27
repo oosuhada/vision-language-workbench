@@ -1,0 +1,242 @@
+{
+  "evaluation_seconds": 4.7324903529997755,
+  "ood": {
+    "clean_mean_r_at_1": 0.857421875,
+    "condition_count": 17,
+    "conditions": [
+      {
+        "absolute_delta_r_at_1": 0.001953125,
+        "corruption": "gaussian_blur",
+        "mean_r_at_1": 0.859375,
+        "mean_r_at_10": 0.99609375,
+        "mean_r_at_5": 0.984375,
+        "retention_r_at_1": 1.0022779043280183,
+        "samples": 256,
+        "severity": 1
+      },
+      {
+        "absolute_delta_r_at_1": -0.029296875,
+        "corruption": "gaussian_blur",
+        "mean_r_at_1": 0.828125,
+        "mean_r_at_10": 0.9921875,
+        "mean_r_at_5": 0.98046875,
+        "retention_r_at_1": 0.9658314350797267,
+        "samples": 256,
+        "severity": 2
+      },
+      {
+        "absolute_delta_r_at_1": -0.103515625,
+        "corruption": "gaussian_blur",
+        "mean_r_at_1": 0.75390625,
+        "mean_r_at_10": 0.978515625,
+        "mean_r_at_5": 0.947265625,
+        "retention_r_at_1": 0.8792710706150342,
+        "samples": 256,
+        "severity": 3
+      },
+      {
+        "absolute_delta_r_at_1": -0.005859375,
+        "corruption": "gaussian_noise",
+        "mean_r_at_1": 0.8515625,
+        "mean_r_at_10": 0.99609375,
+        "mean_r_at_5": 0.982421875,
+        "retention_r_at_1": 0.9931662870159453,
+        "samples": 256,
+        "severity": 1
+      },
+      {
+        "absolute_delta_r_at_1": -0.021484375,
+        "corruption": "gaussian_noise",
+        "mean_r_at_1": 0.8359375,
+        "mean_r_at_10": 0.99609375,
+        "mean_r_at_5": 0.98046875,
+        "retention_r_at_1": 0.9749430523917996,
+        "samples": 256,
+        "severity": 2
+      },
+      {
+        "absolute_delta_r_at_1": -0.046875,
+        "corruption": "gaussian_noise",
+        "mean_r_at_1": 0.810546875,
+        "mean_r_at_10": 0.994140625,
+        "mean_r_at_5": 0.978515625,
+        "retention_r_at_1": 0.9453302961275627,
+        "samples": 256,
+        "severity": 3
+      },
+      {
+        "absolute_delta_r_at_1": -0.00390625,
+        "corruption": "jpeg_compression",
+        "mean_r_at_1": 0.853515625,
+        "mean_r_at_10": 0.99609375,
+        "mean_r_at_5": 0.986328125,
+        "retention_r_at_1": 0.9954441913439636,
+        "samples": 256,
+        "severity": 1
+      },
+      {
+        "absolute_delta_r_at_1": -0.017578125,
+        "corruption": "jpeg_compression",
+        "mean_r_at_1": 0.83984375,
+        "mean_r_at_10": 0.994140625,
+        "mean_r_at_5": 0.984375,
+        "retention_r_at_1": 0.979498861047836,
+        "samples": 256,
+        "severity": 2
+      },
+      {
+        "absolute_delta_r_at_1": -0.0078125,
+        "corruption": "jpeg_compression",
+        "mean_r_at_1": 0.849609375,
+        "mean_r_at_10": 0.99609375,
+        "mean_r_at_5": 0.982421875,
+        "retention_r_at_1": 0.9908883826879271,
+        "samples": 256,
+        "severity": 3
+      },
+      {
+        "absolute_delta_r_at_1": -0.001953125,
+        "corruption": "low_light",
+        "mean_r_at_1": 0.85546875,
+        "mean_r_at_10": 0.998046875,
+        "mean_r_at_5": 0.984375,
+        "retention_r_at_1": 0.9977220956719818,
+        "samples": 256,
+        "severity": 1
+      },
+      {
+        "absolute_delta_r_at_1": -0.017578125,
+        "corruption": "low_light",
+        "mean_r_at_1": 0.83984375,
+        "mean_r_at_10": 0.998046875,
+        "mean_r_at_5": 0.984375,
+        "retention_r_at_1": 0.979498861047836,
+        "samples": 256,
+        "severity": 2
+      },
+      {
+        "absolute_delta_r_at_1": -0.029296875,
+        "corruption": "low_light",
+        "mean_r_at_1": 0.828125,
+        "mean_r_at_10": 0.9921875,
+        "mean_r_at_5": 0.982421875,
+        "retention_r_at_1": 0.9658314350797267,
+        "samples": 256,
+        "severity": 3
+      },
+      {
+        "absolute_delta_r_at_1": -0.1015625,
+        "corruption": "occlusion",
+        "mean_r_at_1": 0.755859375,
+        "mean_r_at_10": 0.982421875,
+        "mean_r_at_5": 0.955078125,
+        "retention_r_at_1": 0.8815489749430524,
+        "samples": 256,
+        "severity": 1
+      },
+      {
+        "absolute_delta_r_at_1": -0.1953125,
+        "corruption": "occlusion",
+        "mean_r_at_1": 0.662109375,
+        "mean_r_at_10": 0.94921875,
+        "mean_r_at_5": 0.916015625,
+        "retention_r_at_1": 0.7722095671981777,
+        "samples": 256,
+        "severity": 2
+      },
+      {
+        "absolute_delta_r_at_1": -0.322265625,
+        "corruption": "occlusion",
+        "mean_r_at_1": 0.53515625,
+        "mean_r_at_10": 0.91796875,
+        "mean_r_at_5": 0.8359375,
+        "retention_r_at_1": 0.6241457858769932,
+        "samples": 256,
+        "severity": 3
+      },
+      {
+        "absolute_delta_r_at_1": -0.439453125,
+        "corruption": "occlusion",
+        "mean_r_at_1": 0.41796875,
+        "mean_r_at_10": 0.85546875,
+        "mean_r_at_5": 0.755859375,
+        "retention_r_at_1": 0.4874715261958998,
+        "samples": 256,
+        "severity": 4
+      },
+      {
+        "absolute_delta_r_at_1": -0.537109375,
+        "corruption": "occlusion",
+        "mean_r_at_1": 0.3203125,
+        "mean_r_at_10": 0.77734375,
+        "mean_r_at_5": 0.658203125,
+        "retention_r_at_1": 0.3735763097949886,
+        "samples": 256,
+        "severity": 5
+      }
+    ],
+    "mean_ood_r_at_1": 0.7468979779411765,
+    "mean_retention_r_at_1": 0.8710974139086157,
+    "variant": "base",
+    "worst_condition": {
+      "absolute_delta_r_at_1": -0.537109375,
+      "corruption": "occlusion",
+      "mean_r_at_1": 0.3203125,
+      "mean_r_at_10": 0.77734375,
+      "mean_r_at_5": 0.658203125,
+      "retention_r_at_1": 0.3735763097949886,
+      "samples": 256,
+      "severity": 5
+    },
+    "worst_retention_r_at_1": 0.3735763097949886
+  },
+  "probe_samples": 256,
+  "representation": {
+    "anisotropy": 0.41242218267053044,
+    "class_count": 4,
+    "class_separation": {
+      "between_class_centroid_cosine": 0.8113057034551803,
+      "separation_margin": -0.33413199916600167,
+      "within_class_cosine": 0.4771737042891786
+    },
+    "dimensions": 256,
+    "linear_probe": {
+      "classes": [
+        "car",
+        "cat",
+        "dog",
+        "person"
+      ],
+      "ridge": 1.0,
+      "test_accuracy": 0.75,
+      "test_samples": 64,
+      "train_accuracy": 0.9322916666666666,
+      "train_samples": 192
+    },
+    "metadata": {
+      "modality": "fused",
+      "model": "Salesforce/blip-itm-base-coco",
+      "revision": "98cf803d8586e8e8b3ec527885ac50c422d514ae",
+      "split": "probe",
+      "variant": "base"
+    },
+    "samples": 256
+  },
+  "retrieval": {
+    "image_to_text_median_rank": 1.0,
+    "image_to_text_nll": 2.0943949106149375,
+    "image_to_text_r_at_1": 0.87109375,
+    "image_to_text_r_at_10": 1.0,
+    "image_to_text_r_at_5": 0.98828125,
+    "mean_r_at_1": 0.857421875,
+    "mean_r_at_10": 0.998046875,
+    "mean_r_at_5": 0.984375,
+    "samples": 256,
+    "text_to_image_median_rank": 1.0,
+    "text_to_image_r_at_1": 0.84375,
+    "text_to_image_r_at_10": 0.99609375,
+    "text_to_image_r_at_5": 0.98046875
+  },
+  "training": null,
+  "variant": "base"
+}

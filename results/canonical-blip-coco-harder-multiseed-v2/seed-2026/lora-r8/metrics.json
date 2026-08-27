@@ -1,0 +1,546 @@
+{
+  "drift_vs_base": {
+    "anisotropy": {
+      "baseline": 0.41242218267053044,
+      "current": 0.3697552037759756,
+      "delta": -0.04266697889455484
+    },
+    "baseline_dimensions": 256,
+    "baseline_metadata": {
+      "modality": "fused",
+      "model": "Salesforce/blip-itm-base-coco",
+      "revision": "98cf803d8586e8e8b3ec527885ac50c422d514ae",
+      "split": "probe",
+      "variant": "base"
+    },
+    "class_centroid_drift": {
+      "mean_cosine_drift": 0.0023121804578140337,
+      "per_class": {
+        "car": 0.001761133153075689,
+        "cat": 0.0030834910186343656,
+        "dog": 0.0027461531384573856,
+        "person": 0.0016579445210886945
+      }
+    },
+    "class_geometry": {
+      "baseline": {
+        "between_class_centroid_cosine": 0.8113057034551803,
+        "separation_margin": -0.33413199916600167,
+        "within_class_cosine": 0.4771737042891786
+      },
+      "current": {
+        "between_class_centroid_cosine": 0.7788913572258923,
+        "separation_margin": -0.3387190904077502,
+        "within_class_cosine": 0.4401722668181421
+      },
+      "separation_margin_delta": -0.004587091241748553
+    },
+    "current_dimensions": 256,
+    "current_metadata": {
+      "modality": "fused",
+      "model": "Salesforce/blip-itm-base-coco",
+      "revision": "98cf803d8586e8e8b3ec527885ac50c422d514ae",
+      "split": "probe",
+      "variant": "lora-r8"
+    },
+    "linear_cka": 0.9995421097182268,
+    "matched_samples": 256,
+    "most_drifted_samples": [
+      {
+        "cosine_drift": 0.004413299040014529,
+        "cosine_similarity": 0.9955867009599855,
+        "id": "coco-val2017-000000235778"
+      },
+      {
+        "cosine_drift": 0.004320808123679631,
+        "cosine_similarity": 0.9956791918763204,
+        "id": "coco-val2017-000000385205"
+      },
+      {
+        "cosine_drift": 0.003764677581461373,
+        "cosine_similarity": 0.9962353224185386,
+        "id": "coco-val2017-000000549220"
+      },
+      {
+        "cosine_drift": 0.003590875097040147,
+        "cosine_similarity": 0.9964091249029599,
+        "id": "coco-val2017-000000316015"
+      },
+      {
+        "cosine_drift": 0.0035857833076489154,
+        "cosine_similarity": 0.9964142166923511,
+        "id": "coco-val2017-000000403817"
+      },
+      {
+        "cosine_drift": 0.003560492578738028,
+        "cosine_similarity": 0.996439507421262,
+        "id": "coco-val2017-000000525247"
+      },
+      {
+        "cosine_drift": 0.0034667659018130514,
+        "cosine_similarity": 0.996533234098187,
+        "id": "coco-val2017-000000402473"
+      },
+      {
+        "cosine_drift": 0.0034516582314212396,
+        "cosine_similarity": 0.9965483417685788,
+        "id": "coco-val2017-000000200961"
+      },
+      {
+        "cosine_drift": 0.0034473978330011867,
+        "cosine_similarity": 0.9965526021669988,
+        "id": "coco-val2017-000000163155"
+      },
+      {
+        "cosine_drift": 0.0034344090780071834,
+        "cosine_similarity": 0.9965655909219928,
+        "id": "coco-val2017-000000273642"
+      }
+    ],
+    "sample_cosine": {
+      "mean_drift": 0.00207103973482127,
+      "mean_similarity": 0.9979289602651787,
+      "median_drift": 0.001923288112070931,
+      "p95_drift": 0.003284712246201943
+    }
+  },
+  "evaluation_seconds": 4.2726076680000915,
+  "ood": {
+    "clean_mean_r_at_1": 0.841796875,
+    "condition_count": 17,
+    "conditions": [
+      {
+        "absolute_delta_r_at_1": 0.0,
+        "corruption": "gaussian_blur",
+        "mean_r_at_1": 0.841796875,
+        "mean_r_at_10": 0.99609375,
+        "mean_r_at_5": 0.984375,
+        "retention_r_at_1": 1.0,
+        "samples": 256,
+        "severity": 1
+      },
+      {
+        "absolute_delta_r_at_1": -0.017578125,
+        "corruption": "gaussian_blur",
+        "mean_r_at_1": 0.82421875,
+        "mean_r_at_10": 0.994140625,
+        "mean_r_at_5": 0.98046875,
+        "retention_r_at_1": 0.9791183294663574,
+        "samples": 256,
+        "severity": 2
+      },
+      {
+        "absolute_delta_r_at_1": -0.095703125,
+        "corruption": "gaussian_blur",
+        "mean_r_at_1": 0.74609375,
+        "mean_r_at_10": 0.98046875,
+        "mean_r_at_5": 0.947265625,
+        "retention_r_at_1": 0.8863109048723898,
+        "samples": 256,
+        "severity": 3
+      },
+      {
+        "absolute_delta_r_at_1": 0.01171875,
+        "corruption": "gaussian_noise",
+        "mean_r_at_1": 0.853515625,
+        "mean_r_at_10": 0.99609375,
+        "mean_r_at_5": 0.986328125,
+        "retention_r_at_1": 1.013921113689095,
+        "samples": 256,
+        "severity": 1
+      },
+      {
+        "absolute_delta_r_at_1": -0.013671875,
+        "corruption": "gaussian_noise",
+        "mean_r_at_1": 0.828125,
+        "mean_r_at_10": 0.99609375,
+        "mean_r_at_5": 0.98046875,
+        "retention_r_at_1": 0.9837587006960556,
+        "samples": 256,
+        "severity": 2
+      },
+      {
+        "absolute_delta_r_at_1": -0.037109375,
+        "corruption": "gaussian_noise",
+        "mean_r_at_1": 0.8046875,
+        "mean_r_at_10": 0.994140625,
+        "mean_r_at_5": 0.978515625,
+        "retention_r_at_1": 0.9559164733178654,
+        "samples": 256,
+        "severity": 3
+      },
+      {
+        "absolute_delta_r_at_1": 0.005859375,
+        "corruption": "jpeg_compression",
+        "mean_r_at_1": 0.84765625,
+        "mean_r_at_10": 0.99609375,
+        "mean_r_at_5": 0.986328125,
+        "retention_r_at_1": 1.0069605568445477,
+        "samples": 256,
+        "severity": 1
+      },
+      {
+        "absolute_delta_r_at_1": -0.009765625,
+        "corruption": "jpeg_compression",
+        "mean_r_at_1": 0.83203125,
+        "mean_r_at_10": 0.994140625,
+        "mean_r_at_5": 0.982421875,
+        "retention_r_at_1": 0.988399071925754,
+        "samples": 256,
+        "severity": 2
+      },
+      {
+        "absolute_delta_r_at_1": 0.0,
+        "corruption": "jpeg_compression",
+        "mean_r_at_1": 0.841796875,
+        "mean_r_at_10": 0.99609375,
+        "mean_r_at_5": 0.982421875,
+        "retention_r_at_1": 1.0,
+        "samples": 256,
+        "severity": 3
+      },
+      {
+        "absolute_delta_r_at_1": 0.0,
+        "corruption": "low_light",
+        "mean_r_at_1": 0.841796875,
+        "mean_r_at_10": 0.998046875,
+        "mean_r_at_5": 0.984375,
+        "retention_r_at_1": 1.0,
+        "samples": 256,
+        "severity": 1
+      },
+      {
+        "absolute_delta_r_at_1": -0.00390625,
+        "corruption": "low_light",
+        "mean_r_at_1": 0.837890625,
+        "mean_r_at_10": 0.998046875,
+        "mean_r_at_5": 0.984375,
+        "retention_r_at_1": 0.9953596287703016,
+        "samples": 256,
+        "severity": 2
+      },
+      {
+        "absolute_delta_r_at_1": -0.017578125,
+        "corruption": "low_light",
+        "mean_r_at_1": 0.82421875,
+        "mean_r_at_10": 0.9921875,
+        "mean_r_at_5": 0.982421875,
+        "retention_r_at_1": 0.9791183294663574,
+        "samples": 256,
+        "severity": 3
+      },
+      {
+        "absolute_delta_r_at_1": -0.0859375,
+        "corruption": "occlusion",
+        "mean_r_at_1": 0.755859375,
+        "mean_r_at_10": 0.982421875,
+        "mean_r_at_5": 0.953125,
+        "retention_r_at_1": 0.8979118329466357,
+        "samples": 256,
+        "severity": 1
+      },
+      {
+        "absolute_delta_r_at_1": -0.185546875,
+        "corruption": "occlusion",
+        "mean_r_at_1": 0.65625,
+        "mean_r_at_10": 0.953125,
+        "mean_r_at_5": 0.912109375,
+        "retention_r_at_1": 0.7795823665893271,
+        "samples": 256,
+        "severity": 2
+      },
+      {
+        "absolute_delta_r_at_1": -0.298828125,
+        "corruption": "occlusion",
+        "mean_r_at_1": 0.54296875,
+        "mean_r_at_10": 0.916015625,
+        "mean_r_at_5": 0.83984375,
+        "retention_r_at_1": 0.6450116009280742,
+        "samples": 256,
+        "severity": 3
+      },
+      {
+        "absolute_delta_r_at_1": -0.42578125,
+        "corruption": "occlusion",
+        "mean_r_at_1": 0.416015625,
+        "mean_r_at_10": 0.861328125,
+        "mean_r_at_5": 0.76171875,
+        "retention_r_at_1": 0.494199535962877,
+        "samples": 256,
+        "severity": 4
+      },
+      {
+        "absolute_delta_r_at_1": -0.5234375,
+        "corruption": "occlusion",
+        "mean_r_at_1": 0.318359375,
+        "mean_r_at_10": 0.78515625,
+        "mean_r_at_5": 0.666015625,
+        "retention_r_at_1": 0.37819025522041766,
+        "samples": 256,
+        "severity": 5
+      }
+    ],
+    "mean_ood_r_at_1": 0.7419577205882353,
+    "mean_retention_r_at_1": 0.8813975706291798,
+    "variant": "lora-r8",
+    "worst_condition": {
+      "absolute_delta_r_at_1": -0.5234375,
+      "corruption": "occlusion",
+      "mean_r_at_1": 0.318359375,
+      "mean_r_at_10": 0.78515625,
+      "mean_r_at_5": 0.666015625,
+      "retention_r_at_1": 0.37819025522041766,
+      "samples": 256,
+      "severity": 5
+    },
+    "worst_retention_r_at_1": 0.37819025522041766
+  },
+  "probe_samples": 256,
+  "representation": {
+    "anisotropy": 0.3697552037759756,
+    "class_count": 4,
+    "class_separation": {
+      "between_class_centroid_cosine": 0.7788913572258923,
+      "separation_margin": -0.3387190904077502,
+      "within_class_cosine": 0.4401722668181421
+    },
+    "dimensions": 256,
+    "linear_probe": {
+      "classes": [
+        "car",
+        "cat",
+        "dog",
+        "person"
+      ],
+      "ridge": 1.0,
+      "test_accuracy": 0.75,
+      "test_samples": 64,
+      "train_accuracy": 0.9375,
+      "train_samples": 192
+    },
+    "metadata": {
+      "modality": "fused",
+      "model": "Salesforce/blip-itm-base-coco",
+      "revision": "98cf803d8586e8e8b3ec527885ac50c422d514ae",
+      "split": "probe",
+      "variant": "lora-r8"
+    },
+    "samples": 256
+  },
+  "retrieval": {
+    "image_to_text_median_rank": 1.0,
+    "image_to_text_nll": 1.904623080510646,
+    "image_to_text_r_at_1": 0.84765625,
+    "image_to_text_r_at_10": 1.0,
+    "image_to_text_r_at_5": 0.98828125,
+    "mean_r_at_1": 0.841796875,
+    "mean_r_at_10": 0.998046875,
+    "mean_r_at_5": 0.984375,
+    "samples": 256,
+    "text_to_image_median_rank": 1.0,
+    "text_to_image_r_at_1": 0.8359375,
+    "text_to_image_r_at_10": 0.99609375,
+    "text_to_image_r_at_5": 0.98046875
+  },
+  "training": {
+    "adapter_fraction_of_base": 0.001318076283325224,
+    "adapter_parameters": 294912,
+    "base_parameters": 223744258,
+    "epochs": 2,
+    "final_loss": 0.1827850341796875,
+    "hard_negative": false,
+    "hard_negative_config": {},
+    "initial_loss": 0.121856689453125,
+    "learning_rate": 0.0001,
+    "matched_modules": 24,
+    "mean_contrastive_loss": 0.17398297786712646,
+    "mean_hard_negative_loss": null,
+    "mean_loss": 0.17398297786712646,
+    "policy": {
+      "alpha": 16.0,
+      "dropout": 0.05,
+      "freeze_base": true,
+      "name": "lora-r8",
+      "rank": 8,
+      "target_regex": [
+        "^text_encoder\\.encoder\\.layer\\.\\d+\\.attention\\.self\\.(query|value)$"
+      ],
+      "target_suffixes": []
+    },
+    "samples": 128,
+    "steps": 32,
+    "targets": [
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.0.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.0.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.1.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.1.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.2.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.2.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.3.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.3.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.4.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.4.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.5.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.5.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.6.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.6.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.7.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.7.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.8.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.8.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.9.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.9.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.10.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.10.attention.self.value",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.11.attention.self.query",
+        "out_features": 768
+      },
+      {
+        "base_parameters": 590592,
+        "in_features": 768,
+        "lora_parameters": 12288,
+        "name": "text_encoder.encoder.layer.11.attention.self.value",
+        "out_features": 768
+      }
+    ],
+    "trainable_parameters_after_injection": 294912,
+    "training_seconds": 5.273795574999895
+  },
+  "variant": "lora-r8"
+}
